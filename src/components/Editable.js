@@ -21,6 +21,7 @@ const Editable = (
     }
     el.addEventListener("focus", handleClick);
     el.addEventListener("blur", handleUpdate);
+    el.addEventListener("keydown", handleKeyDown);
     el.contentEditable = true;
     el.className = "editable";
     return el;
@@ -37,7 +38,14 @@ const Editable = (
       element.textContent = placeholderText;
       return;
     }
-    element.textContent = newTextContent;
+    element.textContent = newTextContent.trim();
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      e.target.blur();
+    }
   };
 
   init();

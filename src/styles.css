@@ -98,17 +98,18 @@ body {
 .checkbox {
   width: 1.75rem;
   height: 1.75rem;
+  background-image: none;
+  background-color: #ebedff;
+  border: 2px solid rgb(190, 193, 212);
+  border-radius: 5px;
+}
+
+.checked {
   background-image: url(./assets/icons8-check-60.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  border-radius: 5px;
-}
-
-.unchecked {
-  background-image: none;
-  background-color: #ebedff;
-  border: 2px solid rgb(190, 193, 212);
+  border: none;
 }
 
 .selected {
@@ -149,10 +150,18 @@ button {
   padding: 2rem;
   background-color: white;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex: 0;
 }
 
 .editable:focus {
   border: none;
   outline: none;
   box-shadow: none;
+  background-color: aliceblue;
+}
+
+.editable {
+  display: inline-block;
 }

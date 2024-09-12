@@ -39,8 +39,8 @@ const TaskCard = (task, handleUpdateTaskInfo, handleCheckbox) => {
 
     state.checkbox = document.createElement("div");
     state.checkbox.className = "checkbox";
-    if (!state.task.isCompleted) {
-      state.checkbox.classList.add("unchecked");
+    if (state.task.isCompleted) {
+      state.checkbox.classList.add("checked");
     }
     state.checkbox.addEventListener("click", (e) => {
       handleCheckbox(e, state.task);
@@ -102,21 +102,14 @@ const TaskCard = (task, handleUpdateTaskInfo, handleCheckbox) => {
       state.description.update(state.task.description);
       state.location.update(state.task.location);
       state.task.isCompleted
-        ? state.checkbox.classList.remove("unchecked")
-        : state.checkbox.classList.add("unchecked");
+        ? state.checkbox.classList.add("checked")
+        : state.checkbox.classList.remove("checked");
       state.dueDate.textContent = DateUtil.formatLong(state.task.dueDate);
       return;
     }
 
     state.task = newTask;
     render();
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      e.target.blur();
-    }
   };
 
   const handleEditableUpdate = (e) => {
