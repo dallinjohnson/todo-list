@@ -1,39 +1,44 @@
-class Editable {
-  constructor(
-    elementType,
-    dataValue,
-    textContent,
-    placeholderText,
-    handleUpdate
-  ) {
-    this.elementType = elementType;
-    this.dataValue = dataValue;
-    this.textContent = textContent;
-    this.placeholderText = placeholderText;
-    this.handleUpdate = handleUpdate;
-    this.element = this.createElement();
-  }
+const Editable = (
+  elementType,
+  dataValue,
+  textContent,
+  placeholderText,
+  handleUpdate
+) => {
+  let element;
 
-  createElement() {
-    const el = document.createElement(this.elementType);
-    el.dataValue = this.dataValue;
-    if (this.textContent) {
-      el.textContent = this.textContent;
+  const init = () => {
+    element = createElement();
+  };
+
+  const createElement = () => {
+    const el = document.createElement(elementType);
+    el.dataValue = dataValue;
+    if (textContent) {
+      el.textContent = textContent;
     } else {
-      el.textContent = this.placeholderText;
+      el.textContent = placeholderText;
     }
-    el.addEventListener("focus", this.handleClick.bind(this));
-    el.addEventListener("blur", this.handleUpdate);
+    el.addEventListener("focus", handleClick);
+    el.addEventListener("blur", handleUpdate);
     el.contentEditable = true;
     el.className = "editable";
     return el;
-  }
+  };
 
-  handleClick(e) {
-    if (this.element.textContent == this.placeholderText) {
-      this.element.textContent = "";
+  const handleClick = (e) => {
+    if (element.textContent == placeholderText) {
+      element.textContent = "";
     }
-  }
-}
+  };
+
+  const update = (newTextContent) => {
+    element.textContent = newTextContent;
+  };
+
+  init();
+
+  return { getElement: () => element };
+};
 
 export { Editable };

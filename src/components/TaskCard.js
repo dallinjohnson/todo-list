@@ -29,7 +29,7 @@ const TaskCard = (task, handleUpdateTaskInfo, handleCheckbox) => {
       return fragment;
     }
 
-    state.title = new Editable(
+    state.title = Editable(
       "h2",
       "title",
       state.task.title,
@@ -48,7 +48,7 @@ const TaskCard = (task, handleUpdateTaskInfo, handleCheckbox) => {
 
     const headerRow = document.createElement("div");
     headerRow.className = "flex-row-space-between";
-    headerRow.append(state.title.element, state.checkbox);
+    headerRow.append(state.title.getElement(), state.checkbox);
 
     const dueDateContainer = document.createElement("span");
     const dueDateImg = document.createElement("img");
@@ -59,7 +59,7 @@ const TaskCard = (task, handleUpdateTaskInfo, handleCheckbox) => {
     state.dueDate.textContent = dateString;
     dueDateContainer.append(dueDateImg, state.dueDate);
 
-    state.location = new Editable(
+    state.location = Editable(
       "p",
       "location",
       state.task.location,
@@ -67,7 +67,7 @@ const TaskCard = (task, handleUpdateTaskInfo, handleCheckbox) => {
       handleEditableUpdate
     );
 
-    state.description = new Editable(
+    state.description = Editable(
       "p",
       "description",
       state.task.description,
@@ -78,8 +78,8 @@ const TaskCard = (task, handleUpdateTaskInfo, handleCheckbox) => {
     fragment.append(
       headerRow,
       dueDateContainer,
-      state.location.element,
-      state.description.element
+      state.location.getElement(),
+      state.description.getElement()
     );
 
     return fragment;
