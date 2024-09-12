@@ -92,10 +92,24 @@ const TaskCard = (task, handleUpdateTaskInfo, handleCheckbox) => {
   };
 
   const update = (newTask) => {
-    if (newTask) {
-      state.task = newTask;
-      render();
+    if (!newTask) {
+      return;
     }
+
+    if (state.task) {
+      state.task = newTask;
+      state.title.update(state.task.title);
+      state.description.update(state.task.description);
+      state.location.update(state.task.location);
+      state.task.isCompleted
+        ? state.checkbox.classList.remove("unchecked")
+        : state.checkbox.classList.add("unchecked");
+      state.dueDate.textContent = DateUtil.formatLong(state.task.dueDate);
+      return;
+    }
+
+    state.task = newTask;
+    render();
   };
 
   const handleKeyDown = (e) => {

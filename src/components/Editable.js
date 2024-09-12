@@ -33,12 +33,19 @@ const Editable = (
   };
 
   const update = (newTextContent) => {
+    if (!newTextContent) {
+      element.textContent = placeholderText;
+      return;
+    }
     element.textContent = newTextContent;
   };
 
   init();
 
-  return { getElement: () => element };
+  return {
+    getElement: () => element,
+    update,
+  };
 };
 
 export { Editable };
