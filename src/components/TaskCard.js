@@ -2,105 +2,119 @@ import calendarIcon from "../assets/icons8-calendar-16.png";
 import { DateUtil } from "../util/DateUtil";
 import { Editable } from "./Editable";
 
-class TaskCard {
-  constructor(task, handleUpdateTaskInfo, handleCheckbox) {
-    this.task = task;
+const TaskCard = (task, handleUpdateTaskInfo, handleCheckbox) => {
+  let state = {
+    task: task,
+    title: null,
+    checkbox: null,
+    dueDate: null,
+    location: null,
+    description: null,
+    element: null,
+  };
 
-    this.handleUpdateTaskInfo = handleUpdateTaskInfo;
-    this.handleCheckbox = handleCheckbox;
-    this.handleEditableUpdate = this.handleEditableUpdate.bind(this);
+  const init = () => {
+    state.element = document.createElement("div");
+    state.element.className = "task-card";
+    render();
+  };
 
-    this.checkBox = document.createElement("div");
-    this.element = this.createElement();
-  }
+  const renderContent = () => {
+    const fragment = document.createDocumentFragment();
 
-  createElement() {
-    const container = document.createElement("div");
-    container.className = "task-card";
-
-    if (!this.task) {
-      container.append("No task selected");
-      return container;
+    if (!state.task) {
+      const noTaskMessage = document.createElement("p");
+      noTaskMessage.textContent = "No task selected";
+      fragment.appendChild(noTaskMessage);
+      return fragment;
     }
 
-    const title = new Editable(
+    state.title = new Editable(
       "h2",
       "title",
-      this.task ? this.task.title : "No task selected",
+      state.task.title,
       "New Task",
-      this.handleEditableUpdate
+      handleEditableUpdate
     );
-    title.element.addEventListener("keydown", this.handleKeyDown);
 
-    const checkBox = document.createElement("div");
-    checkBox.className = "checkbox";
-    if (!this.task.isCompleted) {
-      checkBox.classList.add("unchecked");
+    state.checkbox = document.createElement("div");
+    state.checkbox.className = "checkbox";
+    if (!state.task.isCompleted) {
+      state.checkbox.classList.add("unchecked");
     }
-    checkBox.addEventListener("click", (e) => {
-      this.handleCheckbox(e, this.task);
+    state.checkbox.addEventListener("click", (e) => {
+      handleCheckbox(e, state.task);
     });
 
     const headerRow = document.createElement("div");
     headerRow.className = "flex-row-space-between";
-    headerRow.append(title.element, checkBox);
+    headerRow.append(state.title.element, state.checkbox);
 
-    const dueDateContainer = document.createElement("div");
+    const dueDateContainer = document.createElement("span");
     const dueDateImg = document.createElement("img");
     dueDateImg.className = "icon";
     dueDateImg.src = calendarIcon;
-    if (!this.task.dueDate) {
-      dueDateContainer.append(dueDateImg);
-    }
-    const dateString = DateUtil.formatLong(this.task.dueDate);
-    dueDateContainer.append(dueDateImg, dateString);
+    state.dueDate = document.createElement("span");
+    const dateString = DateUtil.formatLong(state.task.dueDate);
+    state.dueDate.textContent = dateString;
+    dueDateContainer.append(dueDateImg, state.dueDate);
 
-    const location = new Editable(
+    state.location = new Editable(
       "p",
       "location",
-      this.task.location,
+      state.task.location,
       "+ Add Location",
-      this.handleEditableUpdate
+      handleEditableUpdate
     );
 
-    const description = new Editable(
+    state.description = new Editable(
       "p",
       "description",
-      this.task.description,
+      state.task.description,
       "+ Add Description",
-      this.handleEditableUpdate
+      handleEditableUpdate
     );
 
-    container.append(
+    fragment.append(
       headerRow,
       dueDateContainer,
-      location.element,
-      description.element
+      state.location.element,
+      state.description.element
     );
 
-    return container;
-  }
+    return fragment;
+  };
 
-  update(task) {
-    this.task = task;
-    this.render();
-  }
+  const render = () => {
+    state.element.innerHTML = "";
+    const content = renderContent();
+    state.element.appendChild(content);
+  };
 
-  render() {
-    this.element.innerHTML = "";
-    this.element.append(...this.createElement().childNodes);
-  }
+  const update = (newTask) => {
+    if (newTask) {
+      state.task = newTask;
+      render();
+    }
+  };
 
-  handleKeyDown(e) {
+  const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
       e.target.blur();
     }
-  }
+  };
 
-  handleEditableUpdate(e) {
-    this.handleUpdateTaskInfo(e, this.task);
-  }
-}
+  const handleEditableUpdate = (e) => {
+    handleUpdateTaskInfo(e, state.task);
+  };
+
+  init();
+
+  return {
+    getElement: () => state.element,
+    update,
+  };
+};
 
 export { TaskCard };

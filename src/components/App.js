@@ -1,8 +1,7 @@
-import { TaskCard } from "./TaskCard";
 import { TaskList } from "./TaskList";
 import { TaskListControls } from "./TaskListControls";
 import { sortByDate } from "../util/SortUtil";
-import { TaskCard2 } from "./TaskCard2";
+import { TaskCard } from "./TaskCard";
 
 class App {
   constructor(data) {
@@ -15,7 +14,7 @@ class App {
     this.taskListControls = new TaskListControls(
       this.handleSortSelection.bind(this)
     );
-    this.taskCard = TaskCard2(
+    this.taskCard = TaskCard(
       null,
       this.handleTaskUpdate.bind(this),
       this.handleCheckbox.bind(this)
