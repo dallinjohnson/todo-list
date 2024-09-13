@@ -29,8 +29,9 @@ class App {
   }
 
   render() {
+    const headerContainer = document.querySelector("#header");
     const taskListContainer = document.querySelector("#task-list-container");
-    taskListContainer.append(this.taskListControls.element);
+    headerContainer.append(this.taskListControls.element);
     taskListContainer.append(this.taskList.element);
 
     const taskCardContainer = document.querySelector("#task-card-container");

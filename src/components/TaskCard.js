@@ -1,4 +1,6 @@
 import calendarIcon from "../assets/icons8-calendar-16.png";
+import locationIcon from "../assets/icons8-location-16.png";
+import descriptionIcon from "../assets/icons8-note-16.png";
 import { DateUtil } from "../util/DateUtil";
 import { Editable } from "./Editable";
 
@@ -33,7 +35,7 @@ const TaskCard = (task, handleUpdateTaskInfo, handleCheckbox) => {
       "h2",
       "title",
       state.task.title,
-      "New Task",
+      "Add Title",
       handleEditableUpdate
     );
 
@@ -59,27 +61,37 @@ const TaskCard = (task, handleUpdateTaskInfo, handleCheckbox) => {
     state.dueDate.textContent = dateString;
     dueDateContainer.append(dueDateImg, state.dueDate);
 
+    const locationImg = document.createElement("img");
+    locationImg.src = locationIcon;
     state.location = Editable(
       "p",
       "location",
       state.task.location,
-      "+ Add Location",
+      "Add Location",
       handleEditableUpdate
     );
+    const locationContainer = document.createElement("div");
+    locationContainer.className = "icon-group";
+    locationContainer.append(locationImg, state.location.getElement());
 
+    const descriptionImg = document.createElement("img");
+    descriptionImg.src = descriptionIcon;
     state.description = Editable(
       "p",
       "description",
       state.task.description,
-      "+ Add Description",
+      "Add Description",
       handleEditableUpdate
     );
+    const descriptionContainer = document.createElement("div");
+    descriptionContainer.className = "icon-group";
+    descriptionContainer.append(descriptionImg, state.description.getElement());
 
     fragment.append(
       headerRow,
       dueDateContainer,
-      state.location.getElement(),
-      state.description.getElement()
+      locationContainer,
+      descriptionContainer
     );
 
     return fragment;

@@ -20,15 +20,20 @@ const Editable = (
       el.textContent = placeholderText;
     }
     el.addEventListener("focus", handleClick);
-    el.addEventListener("blur", handleUpdate);
+    el.addEventListener("blur", (e) => {
+      element.classList.remove("editable-empty");
+      handleUpdate(e);
+    });
     el.addEventListener("keydown", handleKeyDown);
     el.contentEditable = true;
+    el.setAttribute("spellcheck", false);
     el.className = "editable";
     return el;
   };
 
   const handleClick = (e) => {
     if (element.textContent == placeholderText) {
+      element.classList.add("editable-empty");
       element.textContent = "";
     }
   };
@@ -42,6 +47,8 @@ const Editable = (
   };
 
   const handleKeyDown = (e) => {
+    e.target.classList.remove("editable-empty");
+
     if (e.key === "Enter") {
       e.preventDefault();
       e.target.blur();
