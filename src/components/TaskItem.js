@@ -18,6 +18,7 @@ export class TaskItem {
     title.classList.add("title");
 
     const dueDate = document.createElement("span");
+    dueDate.className = "icon-group";
     const dueDateImg = document.createElement("img");
     dueDateImg.className = "icon";
     dueDateImg.src = calendarIcon;
@@ -29,6 +30,7 @@ export class TaskItem {
     previewRow.append(title, dueDate);
 
     const location = document.createElement("span");
+    location.className = "icon-group";
     location.classList.add("task-location");
     const locationImg = document.createElement("img");
     locationImg.className = "icon";

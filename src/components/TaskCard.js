@@ -52,7 +52,8 @@ const TaskCard = (task, handleUpdateTaskInfo, handleCheckbox) => {
     headerRow.className = "flex-row-space-between";
     headerRow.append(state.title.getElement(), state.checkbox);
 
-    const dueDateContainer = document.createElement("span");
+    const dueDateContainer = document.createElement("div");
+    dueDateContainer.className = "icon-group";
     const dueDateImg = document.createElement("img");
     dueDateImg.className = "icon";
     dueDateImg.src = calendarIcon;
@@ -63,6 +64,7 @@ const TaskCard = (task, handleUpdateTaskInfo, handleCheckbox) => {
 
     const locationImg = document.createElement("img");
     locationImg.src = locationIcon;
+    locationImg.className = "icon";
     state.location = Editable(
       "p",
       "location",
@@ -76,6 +78,7 @@ const TaskCard = (task, handleUpdateTaskInfo, handleCheckbox) => {
 
     const descriptionImg = document.createElement("img");
     descriptionImg.src = descriptionIcon;
+    descriptionImg.className = "icon";
     state.description = Editable(
       "p",
       "description",
@@ -87,12 +90,15 @@ const TaskCard = (task, handleUpdateTaskInfo, handleCheckbox) => {
     descriptionContainer.className = "icon-group";
     descriptionContainer.append(descriptionImg, state.description.getElement());
 
-    fragment.append(
-      headerRow,
+    const contentContainer = document.createElement("div");
+    contentContainer.className = "task-card-content";
+    contentContainer.append(
       dueDateContainer,
       locationContainer,
       descriptionContainer
     );
+
+    fragment.append(headerRow, contentContainer);
 
     return fragment;
   };

@@ -96,8 +96,8 @@ body {
 }
 
 .checkbox {
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
   background-image: none;
   background-color: #ebedff;
   border: 2px solid rgb(190, 193, 212);
@@ -119,16 +119,16 @@ body {
 .icon {
   height: 0.9rem;
   display: inline;
-  margin-right: 0.4rem;
+  margin-top: 0.15rem;
 }
 
 #app {
-  margin: 2rem 6rem;
+  margin: 1rem;
 }
 
 #content {
   display: grid;
-  grid-template-columns: 400px 1fr;
+  grid-template-columns: 350px 1fr;
   align-self: center;
   gap: 1rem;
 }
@@ -152,17 +152,23 @@ button {
   padding: 3rem;
   background-color: white;
   min-height: 600px;
+  border-radius: 0.5rem;
+}
+
+.task-card-content {
+  margin-top: 0.4rem;
+  margin-left: 0.25rem;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  border-radius: 0.5rem;
-  flex: 0;
+  gap: 0.25rem;
 }
 
 .editable {
   box-sizing: border-box;
   display: inline-block;
   padding: 0 0.25rem;
+  border-radius: 0.25rem;
+  line-height: 1.25;
 }
 
 .editable:hover {
@@ -182,6 +188,6 @@ button {
 
 .icon-group {
   display: flex;
-  align-items: center;
-  gap: 0.1rem;
+  align-items: flex-start;
+  gap: 0.25rem;
 }
