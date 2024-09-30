@@ -61,15 +61,24 @@ export class TaskItem {
     }
     description.append(this.task.description);
 
-    const container = document.createElement("div");
-    container.className = "task";
-    container.append(previewRow, detailRow);
+    const checkbox = document.createElement("div");
+    checkbox.className = "checkbox";
+    if (this.task.isCompleted) {
+      checkbox.classList.add("checked");
+    }
 
-    container.addEventListener("click", (e) => {
+    const taskDetails = document.createElement("div");
+    taskDetails.className = "task-details";
+    taskDetails.append(previewRow, detailRow);
+
+    const task = document.createElement("div");
+    task.className = "task";
+    task.addEventListener("click", (e) => {
       this.handleSelect(e, this.task);
     });
+    task.append(checkbox, taskDetails);
 
-    return container;
+    return task;
   }
 
   update(task) {

@@ -7,6 +7,7 @@ class TaskListControls {
   createElement() {
     // make container div
     const container = document.createElement("div");
+    container.className = "task-list-controls";
 
     // make "sort by" dropdown
     const sortSelect = document.createElement("select");
