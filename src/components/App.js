@@ -7,25 +7,12 @@ class App {
   constructor(data) {
     this.tasks = data;
 
-    this.taskList = new TaskList(
-      this.tasks,
-      this.handleTaskListSelect.bind(this)
-    );
+    this.taskList = new TaskList(this.tasks);
     this.taskListControls = new TaskListControls(
       this.handleSortSelection.bind(this)
     );
-    this.taskCard = TaskCard(
-      null,
-      this.handleTaskUpdate.bind(this),
-      this.handleCheckbox.bind(this)
-    );
 
     this.render();
-
-    if (this.tasks.length > 0) {
-      // this.taskCard.update(this.tasks[0]);
-      this.taskList.setSelected(this.taskList.element.childNodes[0]);
-    }
   }
 
   render() {
@@ -33,14 +20,6 @@ class App {
     const taskListContainer = document.querySelector("#task-list-container");
     headerContainer.append(this.taskListControls.element);
     taskListContainer.append(this.taskList.element);
-
-    const taskCardContainer = document.querySelector("#task-card-container");
-    taskCardContainer.append(this.taskCard.getElement());
-  }
-
-  handleTaskListSelect(e, task) {
-    this.taskCard.update(task);
-    this.taskList.setSelected(task.id);
   }
 
   handleTaskUpdate(e, task) {
@@ -59,7 +38,6 @@ class App {
     const index = this.tasks.indexOf(oldTask);
     this.tasks[index] = newTask;
     this.taskList.update(this.tasks);
-    this.taskCard.update(newTask);
   }
 
   handleSortSelection(e) {

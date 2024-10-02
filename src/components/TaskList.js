@@ -1,18 +1,18 @@
 import { TaskItem } from "./TaskItem";
 
 class TaskList {
-  constructor(tasks, handleSelect) {
+  constructor(tasks) {
     this.tasks = tasks;
-    this.handleSelect = handleSelect;
     this.element = this.createElement();
-    this.selectedTaskId = null;
+    this.selectedTaskId = 0;
+    this.handleTaskListSelect = this.handleTaskListSelect.bind(this);
   }
 
   createElement() {
     const container = document.createElement("div");
     container.classList.add("task-list");
     this.tasks.map((t) => {
-      const taskItem = new TaskItem(t, this.handleSelect);
+      const taskItem = new TaskItem(t, this.handleTaskListSelect);
       container.appendChild(taskItem.element);
     });
     return container;
@@ -34,9 +34,16 @@ class TaskList {
     }
   }
 
-  setSelected(taskId) {
-    this.selectedTaskId = taskId;
-    this.render();
+  handleTaskListSelect(e, task) {
+    const allTaskItems = document.querySelectorAll(".task");
+    allTaskItems.forEach((taskItem) => {
+      taskItem.classList.remove("selected");
+    });
+
+    const selectedTaskItem = e.target.closest(".task");
+    selectedTaskItem.classList.add("selected");
+
+    this.selectedTaskId = task.id;
   }
 }
 

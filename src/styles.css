@@ -133,13 +133,6 @@ body {
   margin: 1rem;
 }
 
-#content {
-  display: grid;
-  grid-template-columns: 350px 1fr;
-  align-self: center;
-  gap: 1rem;
-}
-
 .task:hover {
   background-color: rgb(225, 225, 255);
 }
