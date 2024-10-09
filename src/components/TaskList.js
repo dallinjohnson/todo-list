@@ -20,6 +20,18 @@ class TaskList {
 
   update(tasks) {
     this.tasks = tasks;
+
+    this.tasks.forEach((task) => {
+      const existingTaskElement = this.element.querySelector(
+        `[data-task-id="${task.id}"]`
+      );
+      if (!existingTaskElement) {
+        const taskItem = new TaskItem(task, this.handleTaskListSelect);
+        this.element.appendChild(taskItem.element);
+      } else {
+        existingTaskElement.textContent = "task.name";
+      }
+    });
     this.render();
   }
 

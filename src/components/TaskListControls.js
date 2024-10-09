@@ -1,6 +1,7 @@
 class TaskListControls {
-  constructor(handleSortTasks) {
+  constructor(handleSortTasks, handleNewTaskClick) {
     this.handleSortTasks = handleSortTasks;
+    this.handleNewTaskClick = handleNewTaskClick;
     this.element = this.createElement();
   }
 
@@ -39,13 +40,14 @@ class TaskListControls {
     const sortLabel = document.createElement("label");
     sortLabel.htmlFor = "task-sort-select";
     sortLabel.textContent = "Sort By";
-    // add event listener for handleSortTasks
 
-    // make "+ New Task" button
-    //    add event listener for handleCreateTask
-    // return container;
+    const newTaskButton = document.createElement("button");
+    newTaskButton.textContent = "New Task";
+    newTaskButton.addEventListener("click", this.handleNewTaskClick);
 
-    container.append(sortLabel, sortSelect);
+    const leftContainer = document.createElement("div");
+    leftContainer.append(sortLabel, sortSelect);
+    container.append(leftContainer, newTaskButton);
     return container;
   }
 
