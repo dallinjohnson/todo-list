@@ -4,11 +4,13 @@ import priorityIcon from "../assets/icons8-priority-16.png";
 import noteIcon from "../assets/icons8-note-16.png";
 import { DateUtil } from "../util/DateUtil";
 import { Editable } from "./Editable";
+import TaskService from "../services/TaskService";
 
 export class TaskItem {
   constructor(task, handleSelect) {
     this.task = task;
     this.handleSelect = handleSelect;
+    this.handleUpdate = this.handleUpdate.bind(this);
     this.element = this.createElement();
     if (this.task) {
       this.element.dataset.taskId = task.id;
@@ -21,7 +23,7 @@ export class TaskItem {
       "title",
       this.task ? this.task.title : null,
       "No title",
-      null
+      this.handleUpdate
     );
     title.getElement().classList.add("title");
 
@@ -31,7 +33,7 @@ export class TaskItem {
       "dueDate",
       this.task ? DateUtil.formatShort(this.task.dueDate) : null,
       "No due date",
-      null
+      this.handleUpdate
     );
     dueDate.className = "icon-group";
     const dueDateImg = document.createElement("img");
@@ -49,7 +51,7 @@ export class TaskItem {
       "location",
       this.task ? this.task.location : null,
       "No location",
-      null
+      this.handleUpdate
     );
     location.className = "icon-group";
     location.classList.add("task-location");
@@ -95,6 +97,15 @@ export class TaskItem {
     task.append(checkbox, taskDetails);
 
     return task;
+  }
+
+  handleUpdate(e) {
+    const dataValue = e.target.dataValue;
+    const newContent = e.target.textContent;
+
+    const newTask = { ...this.task, [dataValue]: newContent };
+
+    TaskService.update(newTask);
   }
 
   update(task) {

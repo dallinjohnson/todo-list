@@ -6,9 +6,11 @@ const Editable = (
   handleUpdate
 ) => {
   let element;
+  let previousContent;
 
   const init = () => {
     element = createElement();
+    previousContent = element.textContent;
   };
 
   const createElement = () => {
@@ -22,7 +24,15 @@ const Editable = (
     el.addEventListener("focus", handleClick);
     el.addEventListener("blur", (e) => {
       element.classList.remove("editable-empty");
-      handleUpdate(e);
+
+      if (element.textContent === "") {
+        element.textContent = placeholderText;
+      }
+
+      if (element.textContent !== previousContent) {
+        handleUpdate(e);
+      }
+      previousContent = element.textContent;
     });
     el.addEventListener("keydown", handleKeyDown);
     el.contentEditable = true;

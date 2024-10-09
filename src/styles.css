@@ -134,7 +134,7 @@ body {
 }
 
 .task:hover {
-  background-color: rgb(225, 225, 255);
+  /*background-color: rgb(225, 225, 255);*/
 }
 
 button {
