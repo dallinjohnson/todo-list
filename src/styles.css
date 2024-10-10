@@ -137,17 +137,6 @@ body {
   /*background-color: rgb(225, 225, 255);*/
 }
 
-button {
-  padding: 5px 10px;
-  line-height: 1rem;
-  font-size: 0.9rem;
-  border: none;
-  background-color: rgb(45, 45, 46);
-  color: white;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
 .task-card {
   padding: 3rem;
   background-color: white;
@@ -168,6 +157,10 @@ button {
   display: inline-block;
   border-radius: 0.1rem;
   line-height: 1.25;
+}
+
+.disabled {
+  pointer-events: none;
 }
 
 .editable:hover {

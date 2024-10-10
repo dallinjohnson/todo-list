@@ -5,6 +5,7 @@ import noteIcon from "../assets/icons8-note-16.png";
 import { DateUtil } from "../util/DateUtil";
 import { Editable } from "./Editable";
 import TaskService from "../services/TaskService";
+import Checkbox from "./Checkbox.js";
 
 export class TaskItem {
   constructor(task, handleSelect) {
@@ -18,23 +19,17 @@ export class TaskItem {
   }
 
   createElement() {
-    const title = Editable(
-      "span",
-      "title",
-      this.task ? this.task.title : null,
-      "No title",
-      this.handleUpdate
-    );
+    const title = Editable("title", "No title", this.handleUpdate);
     title.getElement().classList.add("title");
+    if (this.task) {
+      title.setText(this.task.title);
+    }
 
     const dueDate = document.createElement("span");
-    const dueDateText = Editable(
-      "span",
-      "dueDate",
-      this.task ? DateUtil.formatShort(this.task.dueDate) : null,
-      "No due date",
-      this.handleUpdate
-    );
+    const dueDateText = Editable("dueDate", "No due date", this.handleUpdate);
+    if (this.task) {
+      dueDateText.setText(DateUtil.formatShort(this.task.dueDate));
+    }
     dueDate.className = "icon-group";
     const dueDateImg = document.createElement("img");
     dueDateImg.className = "icon";
@@ -46,13 +41,7 @@ export class TaskItem {
     previewRow.append(title.getElement(), dueDate);
 
     const location = document.createElement("span");
-    const locationText = Editable(
-      "span",
-      "location",
-      this.task ? this.task.location : null,
-      "No location",
-      this.handleUpdate
-    );
+    const locationText = Editable("location", "No location", this.handleUpdate);
     location.className = "icon-group";
     location.classList.add("task-location");
     const locationImg = document.createElement("img");
@@ -79,10 +68,15 @@ export class TaskItem {
     // }
     // description.append(this.task.description);
 
-    const checkbox = document.createElement("div");
-    checkbox.className = "checkbox";
-    if (this.task && this.task.isCompleted) {
-      checkbox.classList.add("checked");
+    let checkbox;
+    const handleCheckbox = () => {
+      const newTask = { ...this.task, isCompleted: !this.task.isCompleted };
+      TaskService.update(newTask);
+      checkbox.setChecked(newTask.isCompleted);
+    };
+    checkbox = Checkbox(handleCheckbox);
+    if (this.task) {
+      checkbox.setChecked(this.task.isCompleted);
     }
 
     const taskDetails = document.createElement("div");
@@ -94,7 +88,7 @@ export class TaskItem {
     task.addEventListener("click", (e) => {
       this.handleSelect(e, this.task);
     });
-    task.append(checkbox, taskDetails);
+    task.append(checkbox.getElement(), taskDetails);
 
     return task;
   }

@@ -1,19 +1,19 @@
-import { TaskItem } from "./TaskItem";
+import TaskItem from "./NewTaskItem";
 
 class TaskList {
   constructor(tasks) {
     this.tasks = tasks;
     this.element = this.createElement();
     this.selectedTaskId = 0;
-    this.handleTaskListSelect = this.handleTaskListSelect.bind(this);
+    this.handleTaskItemSelect = this.handleTaskItemSelect.bind(this);
   }
 
   createElement() {
     const container = document.createElement("div");
     container.classList.add("task-list");
     this.tasks.map((t) => {
-      const taskItem = new TaskItem(t, this.handleTaskListSelect);
-      container.appendChild(taskItem.element);
+      const taskItem = TaskItem(t, (e) => this.handleTaskItemSelect(e, t));
+      container.appendChild(taskItem.getElement());
     });
     return container;
   }
@@ -26,10 +26,10 @@ class TaskList {
         `[data-task-id="${task.id}"]`
       );
       if (!existingTaskElement) {
-        const taskItem = new TaskItem(task, this.handleTaskListSelect);
-        this.element.appendChild(taskItem.element);
+        const taskItem = TaskItem(task, this.handleTaskItemSelect);
+        this.element.appendChild(taskItem.getElement());
       } else {
-        existingTaskElement.textContent = "task.name";
+        existingTaskElement.textContent = task.name;
       }
     });
     this.render();
@@ -46,15 +46,16 @@ class TaskList {
     }
   }
 
-  handleTaskListSelect(e, task) {
+  handleTaskItemSelect(e, task) {
     const allTaskItems = document.querySelectorAll(".task");
     allTaskItems.forEach((taskItem) => {
       taskItem.classList.remove("selected");
     });
-
     const selectedTaskItem = e.target.closest(".task");
+    console.log(selectedTaskItem);
     selectedTaskItem.classList.add("selected");
 
+    console.log(this.selectedTaskId);
     this.selectedTaskId = task.id;
   }
 }

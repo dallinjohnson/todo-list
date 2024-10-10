@@ -1,11 +1,6 @@
-const Editable = (
-  elementType,
-  dataValue,
-  textContent,
-  placeholderText,
-  handleUpdate
-) => {
+const Editable = (dataValue, placeholderText, handleUpdate) => {
   let element;
+  let textContent;
   let previousContent;
 
   const init = () => {
@@ -14,13 +9,15 @@ const Editable = (
   };
 
   const createElement = () => {
-    const el = document.createElement(elementType);
+    const el = document.createElement("span");
     el.dataValue = dataValue;
+
     if (textContent) {
       el.textContent = textContent;
     } else {
       el.textContent = placeholderText;
     }
+
     el.addEventListener("focus", handleClick);
     el.addEventListener("blur", (e) => {
       element.classList.remove("editable-empty");
@@ -48,7 +45,7 @@ const Editable = (
     }
   };
 
-  const update = (newTextContent) => {
+  const setText = (newTextContent) => {
     if (!newTextContent) {
       element.textContent = placeholderText;
       return;
@@ -69,7 +66,7 @@ const Editable = (
 
   return {
     getElement: () => element,
-    update,
+    setText,
   };
 };
 
