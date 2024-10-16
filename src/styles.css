@@ -89,6 +89,11 @@ body {
   flex-direction: column;
   gap: 0.15rem;
   width: 100%;
+  pointer-events: none;
+}
+
+.selected > .task-details {
+  pointer-events: all;
 }
 
 .title {
@@ -121,6 +126,7 @@ body {
 
 .selected {
   outline: 2px solid rgb(114, 114, 255);
+  pointer-events: all;
 }
 
 .icon {
@@ -157,10 +163,7 @@ body {
   display: inline-block;
   border-radius: 0.1rem;
   line-height: 1.25;
-}
-
-.disabled {
-  pointer-events: none;
+  padding: 0.1rem 0.15rem;
 }
 
 .editable:hover {

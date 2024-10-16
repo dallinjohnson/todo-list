@@ -3,13 +3,14 @@ import TaskService from "../services/TaskService";
 import { Editable } from "./Editable";
 import IconGroup from "./IconGroup";
 import { DateUtil } from "../util/DateUtil";
+import pubsub from "../pubsub/PubSub";
 
 import locationIcon from "../assets/icons8-location-16.png";
 import calendarIcon from "../assets/icons8-calendar-16.png";
 import priorityIcon from "../assets/icons8-priority-16.png";
 import noteIcon from "../assets/icons8-note-16.png";
 
-const TaskItem = (task, handleSelect) => {
+const TaskItem = (task) => {
   let element;
   let checkbox;
   let taskDetails;
@@ -20,6 +21,7 @@ const TaskItem = (task, handleSelect) => {
 
   const init = () => {
     element = createElement();
+    pubsub.subscribe("taskSelected", handleNewTaskSelect);
   };
 
   const createElement = () => {
@@ -48,12 +50,11 @@ const TaskItem = (task, handleSelect) => {
     taskDetails.className = "task-details";
     taskDetails.appendChild(titleRow);
     taskDetails.appendChild(detailRow);
-    taskDetails.classList.add("disabled");
 
     container.appendChild(checkbox.getElement());
     container.appendChild(taskDetails);
     container.addEventListener("click", (e) => {
-      handleSelect(e, task);
+      pubsub.publish("taskSelected", task);
     });
     return container;
   };
@@ -99,9 +100,25 @@ const TaskItem = (task, handleSelect) => {
     TaskService.update(newTask);
   };
 
+  const setSelected = (isSelected) => {
+    isSelected
+      ? element.classList.add("selected")
+      : element.classList.remove("selected");
+  };
+
+  const handleNewTaskSelect = (selectedTask) => {
+    if (selectedTask === task) {
+      setSelected(true);
+    } else {
+      setSelected(false);
+    }
+  };
+
   init();
 
-  return { getElement: () => element };
+  return {
+    getElement: () => element,
+  };
 };
 
 export default TaskItem;
