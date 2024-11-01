@@ -35,7 +35,7 @@ const TaskItem = (task) => {
     title = createTitle();
 
     dueDate = createDueDate();
-    const dueDateGroup = IconGroup(calendarIcon, dueDate.getElement());
+    const dueDateGroup = IconGroup(calendarIcon, dueDate);
 
     const titleRow = document.createElement("div");
     titleRow.classList.add("flex-row-space-between");
@@ -86,8 +86,12 @@ const TaskItem = (task) => {
   };
 
   const createDueDate = () => {
-    const dueDate = Editable("dueDate", "No due date", handleEditableUpdate);
-    dueDate.getElement().classList.add("due-date");
+    // const dueDate = Editable("dueDate", "No due date", handleEditableUpdate);
+    // dueDate.getElement().classList.add("due-date");
+    // return dueDate;
+
+    const dueDate = document.createElement("input");
+    dueDate.type = "date";
     return dueDate;
   };
 
@@ -171,7 +175,7 @@ const TaskItem = (task) => {
   const render = () => {
     checkbox.setChecked(task.isCompleted);
     title.setText(task.title);
-    dueDate.setText(DateUtil.formatShort(task.dueDate));
+    // dueDate.setText(DateUtil.formatShort(task.dueDate));
     description.setText(task.description);
   };
 

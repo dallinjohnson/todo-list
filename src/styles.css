@@ -211,10 +211,8 @@ body {
 
 .selected .priority {
   border: 1px solid #ccc;
-  background: rgb(244, 244, 255);
   pointer-events: auto;
   appearance: auto;
-  text-align: center;
   -webkit-appearance: auto;
   -moz-appearance: auto;
 }
@@ -225,4 +223,16 @@ body {
 
 .selected .hidden {
   display: flex;
+}
+
+.selected input[type="date"] {
+  background-color: none;
+  border: 1px solid #ccc;
+}
+
+input[type="date"] {
+  background-color: none;
+  border: none;
+  text-align: right;
+  border-radius: 5px;
 }
