@@ -22,6 +22,8 @@ const TaskItem = (task) => {
   const init = () => {
     element = createElement();
     pubsub.subscribe("taskSelected", handleNewTaskSelect);
+    pubsub.subscribe("taskUpdated", handleNewTaskUpdate);
+    render();
   };
 
   const createElement = () => {
@@ -61,20 +63,18 @@ const TaskItem = (task) => {
 
   const createCheckbox = () => {
     const checkbox = Checkbox(handleCheckboxClick);
-    task?.isCompleted && checkbox.setChecked(task.isCompleted);
     return checkbox;
   };
 
   const createTitle = () => {
     const title = Editable("title", "No title", handleEditableUpdate);
     title.getElement().classList.add("title");
-    task?.title && title.setText(task.title);
     return title;
   };
 
   const createDueDate = () => {
     const dueDate = Editable("dueDate", "No due date", handleEditableUpdate);
-    task?.dueDate && dueDate.setText(DateUtil.formatShort(task.dueDate));
+    dueDate.getElement().classList.add("due-date");
     return dueDate;
   };
 
@@ -89,7 +89,7 @@ const TaskItem = (task) => {
   const handleCheckboxClick = () => {
     const newTask = { ...task, isCompleted: !task.isCompleted };
     TaskService.update(newTask);
-    checkbox.setChecked(newTask.isCompleted);
+    pubsub.publish("taskUpdated", newTask);
   };
 
   const handleEditableUpdate = (e) => {
@@ -98,6 +98,7 @@ const TaskItem = (task) => {
 
     const newTask = { ...task, [dataValue]: newContent };
     TaskService.update(newTask);
+    pubsub.publish("taskUpdated", newTask);
   };
 
   const setSelected = (isSelected) => {
@@ -112,6 +113,20 @@ const TaskItem = (task) => {
     } else {
       setSelected(false);
     }
+  };
+
+  const handleNewTaskUpdate = (newTask) => {
+    if (newTask.id !== task.id) {
+      return;
+    }
+    task = newTask;
+    render();
+  };
+
+  const render = () => {
+    checkbox.setChecked(task.isCompleted);
+    title.setText(task.title);
+    dueDate.setText(DateUtil.formatShort(task.dueDate));
   };
 
   init();
