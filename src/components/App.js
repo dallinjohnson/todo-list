@@ -11,7 +11,7 @@ class App {
         1,
         "Walk the dog",
         new Date(2024, 8, 10),
-        "High",
+        "high",
         "Duck Pond",
         null
       ),
@@ -19,7 +19,7 @@ class App {
         2,
         "Wash car",
         new Date(2024, 8, 11),
-        "Low",
+        "low",
         null,
         "Remember to vacuum"
       ),
@@ -27,7 +27,7 @@ class App {
         3,
         "Trail run",
         new Date(2024, 8, 15),
-        "Low",
+        "low",
         "Jordan River Trail",
         null
       ),

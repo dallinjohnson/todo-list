@@ -3,7 +3,7 @@ class Task {
     id,
     title,
     dueDate,
-    priority,
+    priority = "low",
     location,
     description,
     isCompleted = false

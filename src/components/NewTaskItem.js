@@ -44,9 +44,12 @@ const TaskItem = (task) => {
     location = createLocation();
     const locationGroup = IconGroup(locationIcon, location.getElement());
 
+    const priority = createPriority();
+
     const detailRow = document.createElement("div");
     detailRow.classList.add("flex-row-space-between");
     detailRow.appendChild(locationGroup.getElement());
+    detailRow.appendChild(priority);
 
     taskDetails = document.createElement("div");
     taskDetails.className = "task-details";
@@ -84,7 +87,28 @@ const TaskItem = (task) => {
     return location;
   };
 
-  const createPriority = () => {};
+  const createPriority = () => {
+    const select = document.createElement("select");
+    const options = [
+      { value: "low", textContent: "Low" },
+      { value: "medium", textContent: "Medium" },
+      { value: "high", textContent: "High" },
+    ];
+    options.forEach((optionData) => {
+      const option = document.createElement("option");
+      option.value = optionData.value;
+      option.textContent = optionData.textContent;
+      select.appendChild(option);
+    });
+    select.addEventListener("change", () => {
+      TaskService.update({ ...task, priority: select.value });
+    });
+    if (task && task.priority) {
+      select.value = task.priority;
+    }
+    select.classList.add("priority");
+    return select;
+  };
 
   const handleCheckboxClick = () => {
     const newTask = { ...task, isCompleted: !task.isCompleted };
