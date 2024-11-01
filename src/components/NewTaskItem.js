@@ -18,6 +18,7 @@ const TaskItem = (task) => {
   let dueDate;
   let location;
   let priority;
+  let description;
 
   const init = () => {
     element = createElement();
@@ -44,17 +45,26 @@ const TaskItem = (task) => {
     location = createLocation();
     const locationGroup = IconGroup(locationIcon, location.getElement());
 
-    const priority = createPriority();
+    priority = createPriority();
 
     const detailRow = document.createElement("div");
     detailRow.classList.add("flex-row-space-between");
     detailRow.appendChild(locationGroup.getElement());
     detailRow.appendChild(priority);
 
+    description = createDescription();
+    console.log(noteIcon);
+    const descriptionGroup = IconGroup(noteIcon, description.getElement());
+
+    const hiddenRow = document.createElement("div");
+    hiddenRow.classList.add("hidden");
+    hiddenRow.appendChild(descriptionGroup.getElement());
+
     taskDetails = document.createElement("div");
     taskDetails.className = "task-details";
     taskDetails.appendChild(titleRow);
     taskDetails.appendChild(detailRow);
+    taskDetails.appendChild(hiddenRow);
 
     container.appendChild(checkbox.getElement());
     container.appendChild(taskDetails);
@@ -110,6 +120,16 @@ const TaskItem = (task) => {
     return select;
   };
 
+  const createDescription = () => {
+    const description = Editable(
+      "description",
+      "Add description",
+      handleEditableUpdate
+    );
+    task?.description && description.setText(task.description);
+    return description;
+  };
+
   const handleCheckboxClick = () => {
     const newTask = { ...task, isCompleted: !task.isCompleted };
     TaskService.update(newTask);
@@ -123,6 +143,7 @@ const TaskItem = (task) => {
     const newTask = { ...task, [dataValue]: newContent };
     TaskService.update(newTask);
     pubsub.publish("taskUpdated", newTask);
+    console.log(TaskService.findAll());
   };
 
   const setSelected = (isSelected) => {
@@ -151,6 +172,7 @@ const TaskItem = (task) => {
     checkbox.setChecked(task.isCompleted);
     title.setText(task.title);
     dueDate.setText(DateUtil.formatShort(task.dueDate));
+    description.setText(task.description);
   };
 
   init();

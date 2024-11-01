@@ -76,7 +76,7 @@ body {
 .task {
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
   padding: 1rem 1.2rem;
   background-color: white;
@@ -108,6 +108,7 @@ body {
 }
 
 .checkbox {
+  margin-top: 5px;
   width: 1.5rem;
   height: 1.5rem;
   background-image: none;
@@ -216,4 +217,12 @@ body {
   text-align: center;
   -webkit-appearance: auto;
   -moz-appearance: auto;
+}
+
+.hidden {
+  display: none;
+}
+
+.selected .hidden {
+  display: flex;
 }
