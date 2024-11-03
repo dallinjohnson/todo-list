@@ -2,13 +2,14 @@ import Checkbox from "./Checkbox";
 import TaskService from "../services/TaskService";
 import { Editable } from "./Editable";
 import IconGroup from "./IconGroup";
-import { DateUtil } from "../util/DateUtil";
 import pubsub from "../pubsub/PubSub";
 
 import locationIcon from "../assets/icons8-location-16.png";
 import calendarIcon from "../assets/icons8-calendar-16.png";
 import priorityIcon from "../assets/icons8-priority-16.png";
 import noteIcon from "../assets/icons8-note-16.png";
+
+import { format, parse } from "date-fns";
 
 const TaskItem = (task) => {
   let element;
@@ -35,12 +36,11 @@ const TaskItem = (task) => {
     title = createTitle();
 
     dueDate = createDueDate();
-    const dueDateGroup = IconGroup(calendarIcon, dueDate);
 
     const titleRow = document.createElement("div");
     titleRow.classList.add("flex-row-space-between");
     titleRow.appendChild(title.getElement());
-    titleRow.appendChild(dueDateGroup.getElement());
+    titleRow.appendChild(dueDate);
 
     location = createLocation();
     const locationGroup = IconGroup(locationIcon, location.getElement());
@@ -53,12 +53,10 @@ const TaskItem = (task) => {
     detailRow.appendChild(priority);
 
     description = createDescription();
-    console.log(noteIcon);
-    const descriptionGroup = IconGroup(noteIcon, description.getElement());
 
     const hiddenRow = document.createElement("div");
     hiddenRow.classList.add("hidden");
-    hiddenRow.appendChild(descriptionGroup.getElement());
+    hiddenRow.appendChild(description.getElement());
 
     taskDetails = document.createElement("div");
     taskDetails.className = "task-details";
@@ -86,12 +84,12 @@ const TaskItem = (task) => {
   };
 
   const createDueDate = () => {
-    // const dueDate = Editable("dueDate", "No due date", handleEditableUpdate);
-    // dueDate.getElement().classList.add("due-date");
-    // return dueDate;
-
     const dueDate = document.createElement("input");
     dueDate.type = "date";
+    dueDate.addEventListener("change", () => {
+      const newDate = parse(dueDate.value, "yyyy-MM-dd", new Date());
+      TaskService.update({ ...task, dueDate: newDate });
+    });
     return dueDate;
   };
 
@@ -127,7 +125,7 @@ const TaskItem = (task) => {
   const createDescription = () => {
     const description = Editable(
       "description",
-      "Add description",
+      "+ Add description",
       handleEditableUpdate
     );
     task?.description && description.setText(task.description);
@@ -147,7 +145,6 @@ const TaskItem = (task) => {
     const newTask = { ...task, [dataValue]: newContent };
     TaskService.update(newTask);
     pubsub.publish("taskUpdated", newTask);
-    console.log(TaskService.findAll());
   };
 
   const setSelected = (isSelected) => {
@@ -175,7 +172,9 @@ const TaskItem = (task) => {
   const render = () => {
     checkbox.setChecked(task.isCompleted);
     title.setText(task.title);
-    // dueDate.setText(DateUtil.formatShort(task.dueDate));
+    if (task.dueDate) {
+      dueDate.value = format(task.dueDate, "yyyy-MM-dd");
+    }
     description.setText(task.description);
   };
 

@@ -7,14 +7,7 @@ import TaskService from "../services/TaskService";
 class App {
   constructor() {
     this.tasks = [
-      new Task(
-        1,
-        "Walk the dog",
-        new Date(2024, 8, 10),
-        "high",
-        "Duck Pond",
-        null
-      ),
+      new Task(1, "Walk the dog", null, "high", "Duck Pond", null),
       new Task(
         2,
         "Wash car",

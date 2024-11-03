@@ -82,6 +82,8 @@ body {
   background-color: white;
   border-radius: 0.5rem;
   user-select: none;
+  box-shadow: 0px 4px 8px rgba(4, 0, 110, 0.2);
+  transition: all 0.3s ease;
 }
 
 .task-details {
@@ -125,8 +127,10 @@ body {
 }
 
 .selected {
-  outline: 2px solid rgb(114, 114, 255);
   pointer-events: all;
+  outline: 2px solid rgba(49, 77, 255, 0.609);
+  outline-style: ridge;
+  transition: outline 0.1s ease;
 }
 
 .icon {
@@ -218,11 +222,15 @@ body {
 }
 
 .hidden {
-  display: none;
+  opacity: 0;
+  max-height: 0;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
 .selected .hidden {
-  display: flex;
+  opacity: 1;
+  max-height: 2rem;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
 .selected input[type="date"] {
