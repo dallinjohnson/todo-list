@@ -3,6 +3,8 @@ import { TaskListControls } from "./TaskListControls";
 import { sortByDate } from "../util/SortUtil";
 import { Task } from "../classes/Task";
 import TaskService from "../services/TaskService";
+import TaskItem from "./NewTaskItem";
+import pubsub from "../pubsub/PubSub";
 
 class App {
   constructor() {
@@ -79,7 +81,12 @@ class App {
     );
   }
 
-  handleNewTaskClick() {}
+  handleNewTaskClick() {
+    const newTask = TaskService.insert(new Task());
+    const taskItem = TaskItem(newTask);
+    this.taskList.element.appendChild(taskItem.getElement());
+    pubsub.publish("taskSelected", newTask);
+  }
 
   sortTasksByDate() {
     this.tasks.sort((a, b) => {
