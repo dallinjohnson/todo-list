@@ -8,28 +8,6 @@ import pubsub from "../pubsub/PubSub";
 
 class App {
   constructor() {
-    this.tasks = [
-      new Task(1, "Walk the dog", null, "high", "Duck Pond", null),
-      new Task(
-        2,
-        "Wash car",
-        new Date(2024, 8, 11),
-        "low",
-        null,
-        "Remember to vacuum"
-      ),
-      new Task(
-        3,
-        "Trail run",
-        new Date(2024, 8, 15),
-        "low",
-        "Jordan River Trail",
-        null
-      ),
-    ];
-
-    TaskService.setTasks(this.tasks);
-
     this.taskList = new TaskList(TaskService.findAll());
     this.taskListControls = new TaskListControls(
       this.handleSortSelection.bind(this),
@@ -44,24 +22,6 @@ class App {
     const taskListContainer = document.querySelector("#task-list-container");
     headerContainer.append(this.taskListControls.element);
     taskListContainer.append(this.taskList.element);
-  }
-
-  handleTaskUpdate(e, task) {
-    const dataValue = e.target.dataValue;
-    const newTask = { ...task, [dataValue]: e.target.textContent };
-    this.updateTask(task, newTask);
-    // handle the thing
-  }
-
-  handleCheckbox(e, task) {
-    const newTask = { ...task, isCompleted: !task.isCompleted };
-    this.updateTask(task, newTask);
-  }
-
-  updateTask(oldTask, newTask) {
-    const index = this.tasks.indexOf(oldTask);
-    this.tasks[index] = newTask;
-    this.taskList.update(this.tasks);
   }
 
   handleSortSelection(e) {

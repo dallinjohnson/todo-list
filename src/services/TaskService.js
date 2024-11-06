@@ -1,6 +1,15 @@
 const TaskService = () => {
   let tasks = [];
 
+  const loadTasks = () => {
+    const savedTasks = localStorage.getItem("tasks");
+    tasks = savedTasks ? JSON.parse(savedTasks) : [];
+  };
+
+  const saveTasks = () => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  };
+
   const generateId = () => {
     const ids = tasks.map((task) => task.id);
     return ids.length ? Math.max(...ids) + 1 : 1;
@@ -14,6 +23,7 @@ const TaskService = () => {
     const indexToDelete = tasks.findIndex((task) => task.id === taskId);
     if (indexToDelete !== -1) {
       tasks = tasks.filter((_, i) => i !== indexToDelete);
+      saveTasks();
       return true;
     }
     return false;
@@ -23,6 +33,7 @@ const TaskService = () => {
     const index = tasks.findIndex((t) => t.id === updatedTask.id);
     if (index !== -1) {
       tasks[index] = { ...tasks[index], ...updatedTask };
+      saveTasks();
       return true;
     }
     return false;
@@ -31,12 +42,16 @@ const TaskService = () => {
   const insert = (task) => {
     const newTask = { ...task, id: generateId() };
     tasks.push(newTask);
+    saveTasks();
     return newTask;
   };
 
   const setTasks = (newTasks) => {
     tasks = newTasks;
+    saveTasks();
   };
+
+  loadTasks();
 
   return { findAll, findById, deleteById, update, insert, setTasks };
 };

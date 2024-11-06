@@ -229,7 +229,7 @@ body {
 
 .selected .hidden {
   opacity: 1;
-  max-height: 2rem;
+  max-height: 5rem;
   transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
