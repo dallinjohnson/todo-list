@@ -1,4 +1,4 @@
-import TaskItem from "./NewTaskItem";
+import TaskItem from "./TaskItem";
 
 class TaskList {
   constructor(tasks) {
@@ -25,7 +25,7 @@ class TaskList {
         `[data-task-id="${task.id}"]`
       );
       if (!existingTaskElement) {
-        const taskItem = TaskItem(task, this.handleTaskItemSelect);
+        const taskItem = TaskItem(task);
         this.element.appendChild(taskItem.getElement());
       } else {
         existingTaskElement.textContent = task.name;

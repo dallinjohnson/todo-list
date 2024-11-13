@@ -3,7 +3,7 @@ import { TaskListControls } from "./TaskListControls";
 import { sortByDate } from "../util/SortUtil";
 import { Task } from "../classes/Task";
 import TaskService from "../services/TaskService";
-import TaskItem from "./NewTaskItem";
+import TaskItem from "./TaskItem";
 import pubsub from "../pubsub/PubSub";
 
 class App {

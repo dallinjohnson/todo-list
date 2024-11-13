@@ -1,3 +1,5 @@
+import pubsub from "../pubsub/PubSub";
+
 class TaskListControls {
   constructor(handleSortTasks, handleNewTaskClick) {
     this.handleSortTasks = handleSortTasks;
@@ -45,9 +47,19 @@ class TaskListControls {
     newTaskButton.textContent = "New Task";
     newTaskButton.addEventListener("click", this.handleNewTaskClick);
 
+    const deleteTaskButton = document.createElement("button");
+    deleteTaskButton.textContent = "Delete Task";
+    deleteTaskButton.addEventListener("click", () => {
+      pubsub.publish("deleteTask");
+    });
+
     const leftContainer = document.createElement("div");
+    const rightContainer = document.createElement("div");
+    rightContainer.classList.add("button-group");
+
     leftContainer.append(sortLabel, sortSelect);
-    container.append(leftContainer, newTaskButton);
+    rightContainer.append(newTaskButton, deleteTaskButton);
+    container.append(leftContainer, rightContainer);
     return container;
   }
 

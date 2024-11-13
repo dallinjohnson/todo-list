@@ -1,114 +1,196 @@
-import locationIcon from "../assets/icons8-location-16.png";
-import calendarIcon from "../assets/icons8-calendar-16.png";
-import priorityIcon from "../assets/icons8-priority-16.png";
-import noteIcon from "../assets/icons8-note-16.png";
-import { DateUtil } from "../util/DateUtil";
-import { Editable } from "./Editable";
+import Checkbox from "./Checkbox";
 import TaskService from "../services/TaskService";
-import Checkbox from "./Checkbox.js";
+import { Editable } from "./Editable";
+import IconGroup from "./IconGroup";
+import pubsub from "../pubsub/PubSub";
 
-export class TaskItem {
-  constructor(task, handleSelect) {
-    this.task = task;
-    this.handleSelect = handleSelect;
-    this.handleUpdate = this.handleUpdate.bind(this);
-    this.element = this.createElement();
-    if (this.task) {
-      this.element.dataset.taskId = task.id;
-    }
-  }
+import locationIcon from "../assets/icons8-location-16.png";
 
-  createElement() {
-    const title = Editable("title", "No title", this.handleUpdate);
-    title.getElement().classList.add("title");
-    if (this.task) {
-      title.setText(this.task.title);
-    }
+import { format, parse } from "date-fns";
 
-    const dueDate = document.createElement("span");
-    const dueDateText = Editable("dueDate", "No due date", this.handleUpdate);
-    if (this.task) {
-      dueDateText.setText(DateUtil.formatShort(this.task.dueDate));
-    }
-    dueDate.className = "icon-group";
-    const dueDateImg = document.createElement("img");
-    dueDateImg.className = "icon";
-    dueDateImg.src = calendarIcon;
-    dueDate.append(dueDateImg, dueDateText.getElement());
+const TaskItem = (task) => {
+  let element;
+  let checkbox;
+  let taskDetails;
+  let title;
+  let dueDate;
+  let location;
+  let priority;
+  let description;
+  let selected;
 
-    const previewRow = document.createElement("div");
-    previewRow.classList.add("flex-row-space-between");
-    previewRow.append(title.getElement(), dueDate);
+  const init = () => {
+    element = createElement();
+    pubsub.subscribe("taskSelected", handleNewTaskSelect);
+    pubsub.subscribe("taskUpdated", handleNewTaskUpdate);
+    pubsub.subscribe("deleteTask", () => {
+      if (selected) {
+        TaskService.deleteById(task.id);
+        element.remove();
+      }
+    });
+    render();
+  };
 
-    const location = document.createElement("span");
-    const locationText = Editable("location", "No location", this.handleUpdate);
-    location.className = "icon-group";
-    location.classList.add("task-location");
-    const locationImg = document.createElement("img");
-    locationImg.className = "icon";
-    locationImg.src = locationIcon;
-    location.append(locationImg, locationText.getElement());
+  const createElement = () => {
+    const container = document.createElement("div");
+    container.className = "task";
 
-    const priority = document.createElement("span");
-    const priorityImg = document.createElement("img");
-    priorityImg.src = priorityIcon;
-    priorityImg.className = "icon";
-    priority.append(this.task ? this.task.priority : "No", " Priority");
+    checkbox = createCheckbox();
+    title = createTitle();
+
+    dueDate = createDueDate();
+
+    const titleRow = document.createElement("div");
+    titleRow.classList.add("flex-row-space-between");
+    titleRow.appendChild(title.getElement());
+    titleRow.appendChild(dueDate);
+
+    location = createLocation();
+    const locationGroup = IconGroup(locationIcon, location.getElement());
+
+    priority = createPriority();
 
     const detailRow = document.createElement("div");
     detailRow.classList.add("flex-row-space-between");
-    detailRow.append(location, priority);
+    detailRow.appendChild(locationGroup.getElement());
+    detailRow.appendChild(priority);
 
-    // const description = document.createElement("span");
-    // const descriptionImg = document.createElement("img");
-    // descriptionImg.src = noteIcon;
-    // descriptionImg.className = "icon";
-    // if (this.task.description) {
-    //   description.append(descriptionImg);
-    // }
-    // description.append(this.task.description);
+    description = createDescription();
 
-    let checkbox;
-    const handleCheckbox = () => {
-      const newTask = { ...this.task, isCompleted: !this.task.isCompleted };
-      TaskService.update(newTask);
-      checkbox.setChecked(newTask.isCompleted);
-    };
-    checkbox = Checkbox(handleCheckbox);
-    if (this.task) {
-      checkbox.setChecked(this.task.isCompleted);
-    }
+    const hiddenRow = document.createElement("div");
+    hiddenRow.classList.add("hidden");
+    hiddenRow.appendChild(description.getElement());
 
-    const taskDetails = document.createElement("div");
+    taskDetails = document.createElement("div");
     taskDetails.className = "task-details";
-    taskDetails.append(previewRow, detailRow);
+    taskDetails.appendChild(titleRow);
+    taskDetails.appendChild(detailRow);
+    taskDetails.appendChild(hiddenRow);
 
-    const task = document.createElement("div");
-    task.className = "task";
-    task.addEventListener("click", (e) => {
-      this.handleSelect(e, this.task);
+    container.appendChild(checkbox.getElement());
+    container.appendChild(taskDetails);
+    container.addEventListener("click", (e) => {
+      pubsub.publish("taskSelected", task);
     });
-    task.append(checkbox.getElement(), taskDetails);
+    return container;
+  };
 
-    return task;
-  }
+  const createCheckbox = () => {
+    const checkbox = Checkbox(handleCheckboxClick);
+    return checkbox;
+  };
 
-  handleUpdate(e) {
+  const createTitle = () => {
+    const title = Editable("title", "No title", handleEditableUpdate);
+    title.getElement().classList.add("title");
+    return title;
+  };
+
+  const createDueDate = () => {
+    const dueDate = document.createElement("input");
+    dueDate.type = "date";
+    dueDate.addEventListener("change", () => {
+      const newDate = parse(dueDate.value, "yyyy-MM-dd", new Date());
+      TaskService.update({ ...task, dueDate: newDate });
+    });
+    return dueDate;
+  };
+
+  const createLocation = () => {
+    const location = Editable("location", "No location", handleEditableUpdate);
+    task?.location && location.setText(task.location);
+    return location;
+  };
+
+  const createPriority = () => {
+    const select = document.createElement("select");
+    const options = [
+      { value: "low", textContent: "Low" },
+      { value: "medium", textContent: "Medium" },
+      { value: "high", textContent: "High" },
+    ];
+    options.forEach((optionData) => {
+      const option = document.createElement("option");
+      option.value = optionData.value;
+      option.textContent = optionData.textContent;
+      select.appendChild(option);
+    });
+    select.addEventListener("change", () => {
+      TaskService.update({ ...task, priority: select.value });
+    });
+    if (task && task.priority) {
+      select.value = task.priority;
+    }
+    select.classList.add("priority");
+    return select;
+  };
+
+  const createDescription = () => {
+    const description = Editable(
+      "description",
+      "+ Add description",
+      handleEditableUpdate
+    );
+    task?.description && description.setText(task.description);
+    return description;
+  };
+
+  const handleCheckboxClick = () => {
+    const newTask = { ...task, isCompleted: !task.isCompleted };
+    TaskService.update(newTask);
+    pubsub.publish("taskUpdated", newTask);
+  };
+
+  const handleEditableUpdate = (e) => {
     const dataValue = e.target.dataValue;
     const newContent = e.target.textContent;
 
-    const newTask = { ...this.task, [dataValue]: newContent };
-
+    const newTask = { ...task, [dataValue]: newContent };
     TaskService.update(newTask);
-  }
+    pubsub.publish("taskUpdated", newTask);
+  };
 
-  update(task) {
-    this.task = task;
-    this.render();
-  }
+  const setSelected = (isSelected) => {
+    if (isSelected) {
+      element.classList.add("selected");
+      selected = true;
+    } else {
+      element.classList.remove("selected");
+      selected = false;
+    }
+  };
 
-  render() {
-    this.element.innerHTML = "";
-    this.element.append(...this.createElement().childNodes);
-  }
-}
+  const handleNewTaskSelect = (selectedTask) => {
+    if (selectedTask === task) {
+      setSelected(true);
+    } else {
+      setSelected(false);
+    }
+  };
+
+  const handleNewTaskUpdate = (newTask) => {
+    if (newTask.id !== task.id) {
+      return;
+    }
+    task = newTask;
+    render();
+  };
+
+  const render = () => {
+    checkbox.setChecked(task.isCompleted);
+    title.setText(task.title);
+    if (task.dueDate) {
+      dueDate.value = format(task.dueDate, "yyyy-MM-dd");
+    }
+    description.setText(task.description);
+  };
+
+  init();
+
+  return {
+    getElement: () => element,
+  };
+};
+
+export default TaskItem;
