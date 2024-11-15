@@ -8,9 +8,8 @@ import pubsub from "../pubsub/PubSub";
 
 class App {
   constructor() {
-    this.taskList = new TaskList(TaskService.findAll());
+    this.taskList = new TaskList();
     this.taskListControls = new TaskListControls(
-      this.handleSortSelection.bind(this),
       this.handleNewTaskClick.bind(this)
     );
 
@@ -24,16 +23,16 @@ class App {
     taskListContainer.append(this.taskList.element);
   }
 
-  handleSortSelection(e) {
-    const value = e.target.value;
-    if (value === "name") {
-      this.sortTasksByName();
-    } else if (value === "date") {
-      this.sortTasksByDate();
-    }
+  // handleSortSelection(e) {
+  //   const value = e.target.value;
+  //   if (value === "name") {
+  //     this.sortTasksByName();
+  //   } else if (value === "date") {
+  //     this.sortTasksByDate();
+  //   }
 
-    this.taskList.update(this.tasks);
-  }
+  //   this.taskList.update(this.tasks);
+  // }
 
   sortTasksByName() {
     this.tasks.sort((a, b) =>

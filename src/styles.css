@@ -162,7 +162,9 @@ body {
   border-radius: 0.1rem;
   line-height: 1.25;
   padding: 0.1rem 0.15rem;
-  word-break: break-all;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .editable:hover {

@@ -1,8 +1,7 @@
 import pubsub from "../pubsub/PubSub";
 
 class TaskListControls {
-  constructor(handleSortTasks, handleNewTaskClick) {
-    this.handleSortTasks = handleSortTasks;
+  constructor(handleNewTaskClick) {
     this.handleNewTaskClick = handleNewTaskClick;
     this.element = this.createElement();
   }
@@ -22,8 +21,8 @@ class TaskListControls {
         selected: true,
       },
       {
-        value: "name",
-        textContent: "Name",
+        value: "title",
+        textContent: "Title",
         selected: false,
       },
     ];
@@ -37,7 +36,10 @@ class TaskListControls {
       }
       sortSelect.appendChild(el);
     });
-    sortSelect.addEventListener("change", this.handleSortTasks);
+    sortSelect.addEventListener("change", () => {
+      pubsub.publish("sortTasks", sortSelect.value);
+      // this.handleSortTasks;
+    });
 
     const sortLabel = document.createElement("label");
     sortLabel.htmlFor = "task-sort-select";
