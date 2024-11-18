@@ -3,41 +3,92 @@ import TaskService from "../services/TaskService";
 import pubsub from "../pubsub/PubSub";
 import { sortByTitle } from "../util/SortUtil";
 import { sortByDate } from "../util/SortUtil";
+import FilterCriteria from "../enums/FilterCriteria";
+import SortingCriteria from "../enums/SortingCriteria";
 
-class TaskList {
-  constructor() {
-    this.tasks = TaskService.findAll();
-    this.element = this.createElement();
-    pubsub.subscribe("sortTasks", (sortingCriteria) =>
-      this.handleSortTasks(sortingCriteria)
-    );
-  }
+const TaskList = () => {
+  let tasks;
+  let element;
+  let sortingCriteria;
+  let filterCriteria;
+  let selectedTask;
 
-  createElement() {
+  const init = () => {
+    tasks = TaskService.findAll();
+    element = createElement();
+
+    pubsub.subscribe("sortTasks", (criteria) => {
+      sortingCriteria = criteria;
+      filterSortTasks();
+    });
+    pubsub.subscribe("filterTasks", (criteria) => {
+      filterCriteria = criteria;
+      filterSortTasks();
+    });
+  };
+
+  const createElement = () => {
     const container = document.createElement("div");
     container.classList.add("task-list");
 
-    const taskItems = this.tasks.map((t) => TaskItem(t));
+    const taskItems = tasks.map((t) => TaskItem(t));
     taskItems.forEach((taskItem) =>
       container.appendChild(taskItem.getElement())
     );
     return container;
-  }
+  };
 
-  handleSortTasks(sortingCriteria) {
-    this.tasks = TaskService.findAll();
-    if (sortingCriteria === "title") {
-      this.tasks.sort((a, b) => sortByTitle(a.title, b.title));
-    } else if (sortingCriteria === "date") {
-      this.tasks.sort((a, b) => sortByDate(a.dueDate, b.dueDate));
+  const filterSortTasks = () => {
+    tasks = TaskService.findAll();
+    const filteredTasks = filterTasks();
+    tasks = filterTasks();
+    const sortedTasks = sortTasks();
+    render();
+  };
+
+  const filterTasks = () => {
+    console.log(filterCriteria);
+    if (!filterCriteria) {
+      return tasks;
     }
-    this.render();
-  }
 
-  render() {
-    this.element.innerHTML = "";
-    this.element.append(...this.createElement().childNodes);
-  }
-}
+    switch (filterCriteria) {
+      case FilterCriteria.ALL:
+        return tasks;
+      case FilterCriteria.COMPLETED:
+        return tasks.filter((task) => task.isCompleted);
+      case FilterCriteria.INCOMPLETE:
+        return tasks.filter((task) => !task.isCompleted);
+      default:
+        return;
+    }
+  };
+
+  const sortTasks = () => {
+    if (!sortingCriteria) {
+      return;
+    }
+
+    switch (sortingCriteria) {
+      case SortingCriteria.DATE:
+        return tasks.sort((a, b) => sortByDate(a.dueDate, b.dueDate));
+      case SortingCriteria.TITLE:
+        return tasks.sort((a, b) => sortByTitle(a.title, b.title));
+      default:
+        return;
+    }
+  };
+
+  const render = () => {
+    element.innerHTML = "";
+    element.append(...createElement().childNodes);
+  };
+
+  init();
+
+  return {
+    getElement: () => element,
+  };
+};
 
 export { TaskList };
