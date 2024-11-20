@@ -25,6 +25,9 @@ const TaskList = () => {
       filterCriteria = criteria;
       filterSortTasks();
     });
+    pubsub.subscribe("taskSelected", (newTask) => {
+      selectedTask = newTask;
+    });
   };
 
   const createElement = () => {
@@ -44,10 +47,10 @@ const TaskList = () => {
     tasks = filterTasks();
     const sortedTasks = sortTasks();
     render();
+    pubsub.publish("taskSelected", selectedTask);
   };
 
   const filterTasks = () => {
-    console.log(filterCriteria);
     if (!filterCriteria) {
       return tasks;
     }

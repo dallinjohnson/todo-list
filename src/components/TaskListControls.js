@@ -50,13 +50,13 @@ class TaskListControls {
     filterSelect.id = "task-filter-select";
     const filterOptions = [
       {
-        value: FilterCriteria.ALL,
-        textContent: "Show All",
+        value: FilterCriteria.INCOMPLETE,
+        textContent: "Incomplete",
         selected: true,
       },
       {
-        value: FilterCriteria.INCOMPLETE,
-        textContent: "Incomplete",
+        value: FilterCriteria.ALL,
+        textContent: "Show All",
         selected: false,
       },
       {
@@ -101,12 +101,12 @@ class TaskListControls {
     leftContainer.append(sortLabel, sortSelect, filterLabel, filterSelect);
     rightContainer.append(newTaskButton, deleteTaskButton);
     container.append(leftContainer, rightContainer);
+
+    pubsub.publish("sortTasks", sortSelect.value);
+    pubsub.publish("filterTasks", filterSelect.value);
+
     return container;
   }
-
-  update() {}
-
-  render() {}
 }
 
 export { TaskListControls };

@@ -250,6 +250,6 @@ input[type="date"] {
   gap: 5px;
 }
 
-select {
+.task-list-controls select {
   margin-right: 1rem;
 }
