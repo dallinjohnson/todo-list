@@ -1,11 +1,7 @@
 class Project {
-  constructor(title, tasks = []) {
-    this.title = title;
-    this.tasks = tasks;
-  }
-
-  addTask(task) {
-    this.tasks.push(task);
+  constructor(id, name) {
+    this.id = id;
+    this.name = name;
   }
 }
 

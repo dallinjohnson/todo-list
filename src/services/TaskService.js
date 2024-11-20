@@ -19,6 +19,9 @@ const TaskService = () => {
 
   const findById = (taskId) => tasks.find((task) => task.id === taskId);
 
+  const findAllByProject = (projectId) =>
+    tasks.find((task) => task.projectId === projectId);
+
   const deleteById = (taskId) => {
     const indexToDelete = tasks.findIndex((task) => task.id === taskId);
     if (indexToDelete !== -1) {
@@ -53,7 +56,15 @@ const TaskService = () => {
 
   loadTasks();
 
-  return { findAll, findById, deleteById, update, insert, setTasks };
+  return {
+    findAll,
+    findById,
+    findAllByProject,
+    deleteById,
+    update,
+    insert,
+    setTasks,
+  };
 };
 
 const instance = TaskService();

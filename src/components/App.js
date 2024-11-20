@@ -1,6 +1,5 @@
-import { TaskList, TL } from "./TaskList";
+import { TaskList } from "./TaskList";
 import { TaskListControls } from "./TaskListControls";
-import { sortByDate } from "../util/SortUtil";
 import { Task } from "../classes/Task";
 import TaskService from "../services/TaskService";
 import TaskItem from "./TaskItem";

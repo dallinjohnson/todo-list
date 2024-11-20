@@ -6,7 +6,8 @@ class Task {
     priority = "low",
     location,
     description,
-    isCompleted = false
+    isCompleted = false,
+    projectId
   ) {
     this.id = id;
     this.title = title;
@@ -15,6 +16,7 @@ class Task {
     this.location = location;
     this.description = description;
     this.isCompleted = isCompleted;
+    this.projectId = projectId;
   }
 }
 
