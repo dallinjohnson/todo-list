@@ -1,21 +1,32 @@
-const App = () => {
-  let element;
-  let headerContainer;
+import TaskView from "./TaskView";
 
-  const init = () => {
-    headerContainer = document.querySelector("#header");
-    element = createElement();
+const App = (rootElement) => {
+  const setContent = (view) => {
+    rootElement.innerHTML = "";
+
+    const heading = document.createElement("h2");
+    heading.textContent = view.heading;
+
+    const content = view.content;
+    content.id = "content";
+
+    rootElement.appendChild(heading);
+    rootElement.appendChild(content);
   };
 
-  const createElement = () => {};
-
-  const render = () => {};
+  const init = () => {
+    const initialContent = {
+      heading: "Tasks",
+      content: TaskView().getElement(),
+    };
+    setContent(initialContent);
+  };
 
   init();
 
   return {
-    getElement: () => element,
+    setContent,
   };
 };
 
-export { App };
+export default App;

@@ -15,11 +15,16 @@ const TaskView = () => {
   const createElement = () => {
     const container = document.createElement("div");
     container.id = "task-view";
-    container.appendChild(taskListControls.getElement());
+    container.appendChild(taskListControls.element);
     container.appendChild(taskList.getElement());
+    return container;
   };
+
+  init();
 
   return {
     getElement: () => element,
   };
 };
+
+export default TaskView;

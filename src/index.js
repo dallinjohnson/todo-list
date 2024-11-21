@@ -1,6 +1,7 @@
-import { App } from "./components/App";
+import App from "./components/NewApp";
 import "./styles.css";
 
 document.addEventListener("DOMContentLoaded", () => {
-  new App();
+  const rootElement = document.getElementById("app");
+  const app = App(rootElement);
 });
