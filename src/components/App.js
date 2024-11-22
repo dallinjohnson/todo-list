@@ -1,33 +1,32 @@
-import { TaskList } from "./TaskList";
-import { TaskListControls } from "./TaskListControls";
-import { Task } from "../classes/Task";
-import TaskService from "../services/TaskService";
-import TaskItem from "./TaskItem";
-import pubsub from "../pubsub/PubSub";
+import TaskView from "./TaskView";
 
-class App {
-  constructor() {
-    this.taskList = TaskList();
-    this.taskListControls = new TaskListControls(
-      this.handleNewTaskClick.bind(this)
-    );
+const App = (rootElement) => {
+  const setContent = (view) => {
+    rootElement.innerHTML = "";
 
-    this.render();
-  }
+    const heading = document.createElement("h2");
+    heading.textContent = view.heading;
 
-  render() {
-    const headerContainer = document.querySelector("#header");
-    const taskListContainer = document.querySelector("#task-list-container");
-    headerContainer.append(this.taskListControls.element);
-    taskListContainer.append(this.taskList.getElement());
-  }
+    const content = view.content;
+    content.id = "content";
 
-  handleNewTaskClick() {
-    const newTask = TaskService.insert(new Task());
-    const taskItem = TaskItem(newTask);
-    this.taskList.getElement().appendChild(taskItem.getElement());
-    pubsub.publish("taskSelected", newTask);
-  }
-}
+    rootElement.appendChild(heading);
+    rootElement.appendChild(content);
+  };
 
-export { App };
+  const init = () => {
+    const initialContent = {
+      heading: "Tasks",
+      content: TaskView().getElement(),
+    };
+    setContent(initialContent);
+  };
+
+  init();
+
+  return {
+    setContent,
+  };
+};
+
+export default App;

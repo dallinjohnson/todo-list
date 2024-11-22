@@ -1,4 +1,4 @@
-import App from "./components/NewApp";
+import App from "./components/App";
 import "./styles.css";
 
 document.addEventListener("DOMContentLoaded", () => {

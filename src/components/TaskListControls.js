@@ -86,7 +86,9 @@ class TaskListControls {
 
     const newTaskButton = document.createElement("button");
     newTaskButton.textContent = "New Task";
-    newTaskButton.addEventListener("click", this.handleNewTaskClick);
+    newTaskButton.addEventListener("click", () => {
+      pubsub.publish("addNewTask");
+    });
 
     const deleteTaskButton = document.createElement("button");
     deleteTaskButton.textContent = "Delete Task";

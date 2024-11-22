@@ -1,4 +1,5 @@
 import TaskItem from "./TaskItem";
+import { Task } from "../classes/Task";
 import TaskService from "../services/TaskService";
 import pubsub from "../pubsub/PubSub";
 import { sortByTitle } from "../util/SortUtil";
@@ -14,7 +15,6 @@ const TaskList = () => {
   let selectedTask;
 
   const init = () => {
-    tasks = TaskService.findAll();
     element = createElement();
 
     pubsub.subscribe("sortTasks", (criteria) => {
@@ -28,9 +28,15 @@ const TaskList = () => {
     pubsub.subscribe("taskSelected", (newTask) => {
       selectedTask = newTask;
     });
+    pubsub.subscribe("addNewTask", () => {
+      const newTask = new Task();
+      TaskService.insert(newTask);
+      render();
+    });
   };
 
   const createElement = () => {
+    tasks = TaskService.findAll();
     const container = document.createElement("div");
     container.classList.add("task-list");
 
