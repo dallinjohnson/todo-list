@@ -1,11 +1,14 @@
+import { Project } from "../classes/Project";
 import TaskService from "./TaskService";
 
 const ProjectService = () => {
-  let projects;
+  let projects = [new Project(1, "Default")];
 
   const loadProjects = () => {
     const savedProjects = localStorage.getItem("projects");
-    projects = savedProjects ? JSON.parse(savedProjects) : [];
+    if (savedProjects) {
+      projects = JSON.parse(savedProjects);
+    }
   };
 
   const saveProjects = () => {

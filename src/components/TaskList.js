@@ -15,6 +15,7 @@ const TaskList = () => {
   let selectedTask;
 
   const init = () => {
+    tasks = TaskService.findAll();
     element = createElement();
 
     pubsub.subscribe("sortTasks", (criteria) => {
@@ -31,12 +32,11 @@ const TaskList = () => {
     pubsub.subscribe("addNewTask", () => {
       const newTask = new Task();
       TaskService.insert(newTask);
-      render();
+      filterSortTasks();
     });
   };
 
   const createElement = () => {
-    tasks = TaskService.findAll();
     const container = document.createElement("div");
     container.classList.add("task-list");
 
@@ -49,9 +49,8 @@ const TaskList = () => {
 
   const filterSortTasks = () => {
     tasks = TaskService.findAll();
-    const filteredTasks = filterTasks();
     tasks = filterTasks();
-    const sortedTasks = sortTasks();
+    sortTasks();
     render();
     pubsub.publish("taskSelected", selectedTask);
   };
