@@ -2,12 +2,17 @@ import { Project } from "../classes/Project";
 import TaskService from "./TaskService";
 
 const ProjectService = () => {
-  let projects = [new Project(1, "Default")];
+  let projects = [];
 
   const loadProjects = () => {
     const savedProjects = localStorage.getItem("projects");
     if (savedProjects) {
+      // Load projects from localStorage if data exists
       projects = JSON.parse(savedProjects);
+    } else {
+      // Initialize with default projects and save to localStorage
+      projects = [new Project(1, "Default"), new Project(2, "Home Renovation")];
+      saveProjects(); // Save defaults to localStorage
     }
   };
 
@@ -23,11 +28,15 @@ const ProjectService = () => {
   const findAll = () => [...projects];
 
   const findById = (projectId) =>
-    projects.find((project) => (project.id = projectId));
+    projects.find((project) => project.id === projectId);
 
   const deleteById = (projectId) => {
+    if (projectId === 1) {
+      return false;
+    }
+
     const indexToDelete = projects.findIndex(
-      (project) => (project.id = projectId)
+      (project) => project.id === projectId
     );
     if (indexToDelete !== -1) {
       projects = projects.filter((_, i) => i !== indexToDelete);
@@ -59,8 +68,6 @@ const ProjectService = () => {
   };
 
   loadProjects();
-
-  projects = [{ name: "Test" }];
 
   return { findAll, findById, deleteById, update, insert };
 };

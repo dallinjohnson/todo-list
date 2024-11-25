@@ -141,21 +141,6 @@ body {
   margin: 1rem;
 }
 
-.task-card {
-  padding: 3rem;
-  background-color: white;
-  min-height: 600px;
-  border-radius: 0.5rem;
-}
-
-.task-card-content {
-  margin-top: 0.4rem;
-  margin-left: 0.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
 .editable {
   box-sizing: border-box;
   display: inline-block;
@@ -252,4 +237,25 @@ input[type="date"] {
 
 .task-list-controls select {
   margin-right: 1rem;
+}
+
+.project {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.2rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0px 4px 8px rgba(4, 0, 110, 0.2);
+}
+
+.project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.split-view {
+  display: grid;
+  grid-template-columns: 300px minmax(500px, 1fr);
+  gap: 1rem;
 }

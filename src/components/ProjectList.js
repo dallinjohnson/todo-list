@@ -1,4 +1,5 @@
 import ProjectService from "../services/ProjectService";
+import ProjectItem from "./ProjectItem";
 
 const ProjectList = () => {
   let element;
@@ -6,6 +7,7 @@ const ProjectList = () => {
 
   const init = () => {
     projects = ProjectService.findAll();
+    console.log("Projects:", projects);
     element = createElement();
   };
 
@@ -13,9 +15,8 @@ const ProjectList = () => {
     const container = document.createElement("div");
     container.classList.add("project-list");
     projects.map((project) => {
-      const h1 = document.createElement("h1");
-      h1.textContent = project.name;
-      container.appendChild(h1);
+      const projectItem = ProjectItem(project);
+      container.appendChild(projectItem.getElement());
     });
     return container;
   };

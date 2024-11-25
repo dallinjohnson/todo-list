@@ -31,8 +31,14 @@ const TaskList = () => {
     });
     pubsub.subscribe("addNewTask", () => {
       const newTask = new Task();
+      newTask.projectId = 1;
       TaskService.insert(newTask);
       filterSortTasks();
+    });
+    pubsub.subscribe("projectSelected", (project) => {
+      tasks = TaskService.findAllByProject(project.id);
+      console.log("HELLO");
+      render();
     });
   };
 

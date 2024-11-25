@@ -1,25 +1,22 @@
+import { ProjectList } from "./ProjectList";
 import TaskView from "./TaskView";
 
 const App = (rootElement) => {
-  const setContent = (view) => {
+  const setContent = (c) => {
     rootElement.innerHTML = "";
 
-    const heading = document.createElement("h2");
-    heading.textContent = view.heading;
-
-    const content = view.content;
+    const content = c;
     content.id = "content";
-
-    rootElement.appendChild(heading);
     rootElement.appendChild(content);
   };
 
   const init = () => {
-    const initialContent = {
-      heading: "Tasks",
-      content: TaskView().getElement(),
-    };
-    setContent(initialContent);
+    const container = document.createElement("div");
+    container.classList.add("split-view");
+    container.appendChild(ProjectList().getElement());
+    container.appendChild(TaskView().getElement());
+
+    setContent(container);
   };
 
   init();

@@ -20,7 +20,7 @@ const TaskService = () => {
   const findById = (taskId) => tasks.find((task) => task.id === taskId);
 
   const findAllByProject = (projectId) =>
-    tasks.find((task) => task.projectId === projectId);
+    [...tasks].filter((task) => task.projectId === projectId);
 
   const deleteById = (taskId) => {
     const indexToDelete = tasks.findIndex((task) => task.id === taskId);
