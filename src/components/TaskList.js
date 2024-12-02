@@ -1,6 +1,7 @@
 import TaskItem from "./TaskItem";
 import { Task } from "../classes/Task";
 import TaskService from "../services/TaskService";
+import ProjectService from "../services/ProjectService";
 import pubsub from "../pubsub/PubSub";
 import { sortByTitle } from "../util/SortUtil";
 import { sortByDate } from "../util/SortUtil";
@@ -13,6 +14,7 @@ const TaskList = () => {
   let sortingCriteria;
   let filterCriteria;
   let selectedTask;
+  let selectedProject = ProjectService.findById(1);
 
   const init = () => {
     tasks = TaskService.findAll();
@@ -20,24 +22,28 @@ const TaskList = () => {
 
     pubsub.subscribe("sortTasks", (criteria) => {
       sortingCriteria = criteria;
-      filterSortTasks();
+      refreshTasks();
+      render();
     });
     pubsub.subscribe("filterTasks", (criteria) => {
       filterCriteria = criteria;
-      filterSortTasks();
+      refreshTasks();
+      render();
     });
     pubsub.subscribe("taskSelected", (newTask) => {
       selectedTask = newTask;
     });
     pubsub.subscribe("addNewTask", () => {
       const newTask = new Task();
-      newTask.projectId = 1;
+      newTask.projectId = selectedProject.id;
       TaskService.insert(newTask);
-      filterSortTasks();
+      refreshTasks();
+      render();
+      pubsub.publish("numberOfTasksChanged");
     });
     pubsub.subscribe("projectSelected", (project) => {
-      tasks = TaskService.findAllByProject(project.id);
-      console.log("HELLO");
+      selectedProject = project;
+      refreshTasks();
       render();
     });
   };
@@ -53,15 +59,15 @@ const TaskList = () => {
     return container;
   };
 
-  const filterSortTasks = () => {
-    tasks = TaskService.findAll();
-    tasks = filterTasks();
-    sortTasks();
-    render();
+  const refreshTasks = () => {
+    const projectTasks = TaskService.findAllByProject(selectedProject.id);
+    const filteredTasks = filterTasks(projectTasks);
+    const sortedTasks = sortTasks(filteredTasks);
+    tasks = sortedTasks;
     pubsub.publish("taskSelected", selectedTask);
   };
 
-  const filterTasks = () => {
+  const filterTasks = (tasks) => {
     if (!filterCriteria) {
       return tasks;
     }
@@ -78,9 +84,9 @@ const TaskList = () => {
     }
   };
 
-  const sortTasks = () => {
+  const sortTasks = (tasks) => {
     if (!sortingCriteria) {
-      return;
+      return tasks;
     }
 
     switch (sortingCriteria) {
@@ -89,7 +95,7 @@ const TaskList = () => {
       case SortingCriteria.TITLE:
         return tasks.sort((a, b) => sortByTitle(a.title, b.title));
       default:
-        return;
+        return tasks;
     }
   };
 

@@ -9,7 +9,8 @@ const ProjectItem = (project) => {
 
   const init = () => {
     element = createElement();
-    pubsub.subscribe("addNewTask", render);
+    pubsub.subscribe("numberOfTasksChanged", render);
+    render();
   };
 
   const createElement = () => {
@@ -34,18 +35,12 @@ const ProjectItem = (project) => {
     return container;
   };
 
-  const handleTitleUpdate = (e) => {
-    const dataValue = e.target.dataValue;
-    const newContent = e.target.textContent;
-
-    const newProject = { ...project, [dataValue]: newContent };
-    ProjectService.update(newProject);
+  const render = () => {
+    numTasks.textContent = `${getNumTasks()} tasks`;
   };
 
-  const render = () => {
-    numTasks.textContent = `${
-      TaskService.findAllByProject(project.id).length
-    } tasks`;
+  const getNumTasks = () => {
+    return TaskService.findAllByProject(project.id).length;
   };
 
   init();

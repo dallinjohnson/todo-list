@@ -7,7 +7,6 @@ const ProjectList = () => {
 
   const init = () => {
     projects = ProjectService.findAll();
-    console.log("Projects:", projects);
     element = createElement();
   };
 

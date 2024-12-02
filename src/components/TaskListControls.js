@@ -94,6 +94,7 @@ class TaskListControls {
     deleteTaskButton.textContent = "Delete Task";
     deleteTaskButton.addEventListener("click", () => {
       pubsub.publish("deleteTask");
+      pubsub.publish("numberOfTasksChanged");
     });
 
     const leftContainer = document.createElement("div");
