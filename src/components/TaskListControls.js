@@ -1,4 +1,3 @@
-import FilterCriteria from "../enums/FilterCriteria";
 import SortingCriteria from "../enums/SortingCriteria";
 import pubsub from "../pubsub/PubSub";
 
@@ -46,44 +45,6 @@ class TaskListControls {
     sortLabel.htmlFor = "task-sort-select";
     sortLabel.textContent = "Sort By";
 
-    const filterSelect = document.createElement("select");
-    filterSelect.id = "task-filter-select";
-    const filterOptions = [
-      {
-        value: FilterCriteria.INCOMPLETE,
-        textContent: "Incomplete",
-        selected: true,
-      },
-      {
-        value: FilterCriteria.ALL,
-        textContent: "Show All",
-        selected: false,
-      },
-      {
-        value: FilterCriteria.COMPLETED,
-        textContent: "Completed",
-        selected: false,
-      },
-    ];
-
-    filterOptions.map((option) => {
-      const el = document.createElement("option");
-      el.textContent = option.textContent;
-      el.value = option.value;
-      if (option.selected) {
-        el.selected = true;
-      }
-      filterSelect.appendChild(el);
-    });
-
-    filterSelect.addEventListener("change", () => {
-      pubsub.publish("filterTasks", filterSelect.value);
-    });
-
-    const filterLabel = document.createElement("label");
-    filterLabel.htmlFor = "task-filter-select";
-    filterLabel.textContent = "Filter";
-
     const newTaskButton = document.createElement("button");
     newTaskButton.textContent = "New Task";
     newTaskButton.addEventListener("click", () => {
@@ -101,12 +62,11 @@ class TaskListControls {
     const rightContainer = document.createElement("div");
     rightContainer.classList.add("button-group");
 
-    leftContainer.append(sortLabel, sortSelect, filterLabel, filterSelect);
+    leftContainer.append(sortLabel, sortSelect);
     rightContainer.append(newTaskButton, deleteTaskButton);
     container.append(leftContainer, rightContainer);
 
     pubsub.publish("sortTasks", sortSelect.value);
-    pubsub.publish("filterTasks", filterSelect.value);
 
     return container;
   }

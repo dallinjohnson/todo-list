@@ -5,14 +5,12 @@ import ProjectService from "../services/ProjectService";
 import pubsub from "../pubsub/PubSub";
 import { sortByTitle } from "../util/SortUtil";
 import { sortByDate } from "../util/SortUtil";
-import FilterCriteria from "../enums/FilterCriteria";
 import SortingCriteria from "../enums/SortingCriteria";
 
-const TaskList = () => {
+const TaskList = (displayActiveTasks = true) => {
   let tasks;
   let element;
   let sortingCriteria;
-  let filterCriteria;
   let selectedTask;
   let selectedProject = ProjectService.findById(1);
 
@@ -22,11 +20,6 @@ const TaskList = () => {
 
     pubsub.subscribe("sortTasks", (criteria) => {
       sortingCriteria = criteria;
-      refreshTasks();
-      render();
-    });
-    pubsub.subscribe("filterTasks", (criteria) => {
-      filterCriteria = criteria;
       refreshTasks();
       render();
     });
@@ -46,11 +39,21 @@ const TaskList = () => {
       refreshTasks();
       render();
     });
+    pubsub.subscribe("taskUpdated", (newTask) => {
+      refreshTasks();
+      render();
+    });
   };
 
   const createElement = () => {
     const container = document.createElement("div");
     container.classList.add("task-list");
+
+    const header = document.createElement("span");
+    header.textContent = displayActiveTasks
+      ? "Active Tasks"
+      : "Completed Tasks";
+    container.appendChild(header);
 
     const taskItems = tasks.map((t) => TaskItem(t));
     taskItems.forEach((taskItem) =>
@@ -64,23 +67,13 @@ const TaskList = () => {
     const filteredTasks = filterTasks(projectTasks);
     const sortedTasks = sortTasks(filteredTasks);
     tasks = sortedTasks;
-    pubsub.publish("taskSelected", selectedTask);
   };
 
   const filterTasks = (tasks) => {
-    if (!filterCriteria) {
-      return tasks;
-    }
-
-    switch (filterCriteria) {
-      case FilterCriteria.ALL:
-        return tasks;
-      case FilterCriteria.COMPLETED:
-        return tasks.filter((task) => task.isCompleted);
-      case FilterCriteria.INCOMPLETE:
-        return tasks.filter((task) => !task.isCompleted);
-      default:
-        return;
+    if (displayActiveTasks) {
+      return tasks.filter((task) => !task.isCompleted);
+    } else {
+      return tasks.filter((task) => task.isCompleted);
     }
   };
 

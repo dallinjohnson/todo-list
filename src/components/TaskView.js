@@ -4,10 +4,12 @@ import { TaskListControls } from "./TaskListControls";
 const TaskView = () => {
   let element;
   let taskList;
+  let taskListCompleted;
   let taskListControls;
 
   const init = () => {
     taskList = TaskList();
+    taskListCompleted = TaskList(false);
     taskListControls = new TaskListControls();
     element = createElement();
   };
@@ -17,6 +19,7 @@ const TaskView = () => {
     container.id = "task-view";
     container.appendChild(taskListControls.element);
     container.appendChild(taskList.getElement());
+    container.appendChild(taskListCompleted.getElement());
     return container;
   };
 
