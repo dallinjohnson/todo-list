@@ -27,6 +27,9 @@ const TaskList = (displayActiveTasks = true) => {
       selectedTask = newTask;
     });
     pubsub.subscribe("addNewTask", () => {
+      if (!displayActiveTasks) {
+        return;
+      }
       const newTask = new Task();
       newTask.projectId = selectedProject.id;
       TaskService.insert(newTask);

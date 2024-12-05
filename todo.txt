@@ -1,0 +1,25 @@
+Move + New Task button to the right of the "Active Tasks" label of Active Task List
+Move delete task option into task item
+TaskListControls will now only contain "Sort By" select and label
+Add header to the left that says either "Tasks" or the Project Name.
+
+
+New Task View Layout
+-----------------------------
+[ HEADER ]        [ SORT BY ]
+
+[ ACTIVE TASKS ]  [ + NEW T ]
+[ TASK 1 ////////////////// ]
+...
+[ TASK N ////////////////// ]
+
+[ COMPLETED TASKS ]
+[ TASK 1 ////////////////// ]
+...
+[ TASK N ////////////////// ]
+-----------------------------
+
+
+Also need to do a similar layout for projects
+When all tasks of a project are completed, it is marked as complete and "moves" to the
+completed project list
