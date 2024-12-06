@@ -7,7 +7,7 @@ import { sortByTitle } from "../util/SortUtil";
 import { sortByDate } from "../util/SortUtil";
 import SortingCriteria from "../enums/SortingCriteria";
 
-const TaskList = (displayActiveTasks = true) => {
+const TaskList = (listHeader, displayActiveTasks = true) => {
   let tasks;
   let element;
   let sortingCriteria;
@@ -51,12 +51,7 @@ const TaskList = (displayActiveTasks = true) => {
   const createElement = () => {
     const container = document.createElement("div");
     container.classList.add("task-list");
-
-    const header = document.createElement("span");
-    header.textContent = displayActiveTasks
-      ? "Active Tasks"
-      : "Completed Tasks";
-    container.appendChild(header);
+    container.appendChild(listHeader);
 
     const taskItems = tasks.map((t) => TaskItem(t));
     taskItems.forEach((taskItem) =>

@@ -2,8 +2,7 @@ import SortingCriteria from "../enums/SortingCriteria";
 import pubsub from "../pubsub/PubSub";
 
 class TaskListControls {
-  constructor(handleNewTaskClick) {
-    this.handleNewTaskClick = handleNewTaskClick;
+  constructor() {
     this.element = this.createElement();
   }
 
@@ -45,12 +44,6 @@ class TaskListControls {
     sortLabel.htmlFor = "task-sort-select";
     sortLabel.textContent = "Sort By";
 
-    const newTaskButton = document.createElement("button");
-    newTaskButton.textContent = "New Task";
-    newTaskButton.addEventListener("click", () => {
-      pubsub.publish("addNewTask");
-    });
-
     const deleteTaskButton = document.createElement("button");
     deleteTaskButton.textContent = "Delete Task";
     deleteTaskButton.addEventListener("click", () => {
@@ -63,7 +56,7 @@ class TaskListControls {
     rightContainer.classList.add("button-group");
 
     leftContainer.append(sortLabel, sortSelect);
-    rightContainer.append(newTaskButton, deleteTaskButton);
+    rightContainer.append(deleteTaskButton);
     container.append(leftContainer, rightContainer);
 
     pubsub.publish("sortTasks", sortSelect.value);

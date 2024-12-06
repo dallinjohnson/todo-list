@@ -22,13 +22,14 @@ const Editable = (dataValue, placeholderText, handleUpdate) => {
     el.addEventListener("blur", (e) => {
       element.classList.remove("editable-empty");
 
+      if (element.textContent !== previousContent) {
+        handleUpdate(e);
+      }
+
       if (element.textContent === "") {
         element.textContent = placeholderText;
       }
 
-      if (element.textContent !== previousContent) {
-        handleUpdate(e);
-      }
       previousContent = element.textContent;
     });
     el.addEventListener("keydown", handleKeyDown);

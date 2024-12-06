@@ -260,3 +260,29 @@ input[type="date"] {
   grid-template-columns: 300px minmax(500px, 1fr);
   gap: 1rem;
 }
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.list-header h4 {
+  font-weight: bold;
+}
+
+.list-header-action {
+  padding: 0.1rem 0.15rem;
+  border-radius: 5px;
+  user-select: none;
+}
+
+.list-header-action:hover {
+  background-color: #ebedff;
+}
+
+#task-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
