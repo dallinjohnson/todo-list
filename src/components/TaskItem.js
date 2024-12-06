@@ -5,6 +5,7 @@ import IconGroup from "./IconGroup";
 import pubsub from "../pubsub/PubSub";
 
 import locationIcon from "../assets/icons8-location-16.png";
+import deleteIcon from "../assets/icons8-trash-30.png";
 
 import { format, parse } from "date-fns";
 
@@ -58,9 +59,19 @@ const TaskItem = (task) => {
 
     description = createDescription();
 
+    const trashImage = document.createElement("img");
+    trashImage.src = deleteIcon;
+    trashImage.classList.add("task-delete-btn");
+    trashImage.addEventListener("click", () => {
+      pubsub.publish("deleteTask");
+      pubsub.publish("numberOfTasksChanged");
+    });
+
     const hiddenRow = document.createElement("div");
     hiddenRow.classList.add("hidden");
+    hiddenRow.classList.add("flex-row-space-between");
     hiddenRow.appendChild(description.getElement());
+    hiddenRow.appendChild(trashImage);
 
     taskDetails = document.createElement("div");
     taskDetails.className = "task-details";

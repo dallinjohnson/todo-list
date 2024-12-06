@@ -1,5 +1,5 @@
 import { TaskList } from "./TaskList";
-import { TaskListControls } from "./TaskListControls";
+import ViewHeader from "./ViewHeader";
 import ListHeader from "./ListHeader";
 import pubsub from "../pubsub/PubSub";
 
@@ -7,7 +7,7 @@ const TaskView = () => {
   let element;
   let inProgressTaskList;
   let completedTaskList;
-  let taskListControls;
+  let viewHeader;
 
   const init = () => {
     const inProgressTaskListHeader = ListHeader(
@@ -20,14 +20,14 @@ const TaskView = () => {
     const completedTaskListHeader = ListHeader("Completed");
     completedTaskList = TaskList(completedTaskListHeader.getElement(), false);
 
-    taskListControls = new TaskListControls();
+    viewHeader = new ViewHeader();
     element = createElement();
   };
 
   const createElement = () => {
     const container = document.createElement("div");
     container.id = "task-view";
-    container.appendChild(taskListControls.element);
+    container.appendChild(viewHeader.element);
     container.appendChild(inProgressTaskList.getElement());
     container.appendChild(completedTaskList.getElement());
     return container;
