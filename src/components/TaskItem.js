@@ -59,19 +59,21 @@ const TaskItem = (task) => {
 
     description = createDescription();
 
-    const trashImage = document.createElement("img");
-    trashImage.src = deleteIcon;
-    trashImage.classList.add("task-delete-btn");
-    trashImage.addEventListener("click", () => {
-      pubsub.publish("deleteTask");
-      pubsub.publish("numberOfTasksChanged");
+    const deleteButton = document.createElement("img");
+    deleteButton.src = deleteIcon;
+    deleteButton.classList.add("task-delete-btn");
+    deleteButton.addEventListener("click", () => {
+      if (confirm("Are you sure you want to delete this task?")) {
+        pubsub.publish("deleteTask");
+        pubsub.publish("numberOfTasksChanged");
+      }
     });
 
     const hiddenRow = document.createElement("div");
     hiddenRow.classList.add("hidden");
     hiddenRow.classList.add("flex-row-space-between");
     hiddenRow.appendChild(description.getElement());
-    hiddenRow.appendChild(trashImage);
+    hiddenRow.appendChild(deleteButton);
 
     taskDetails = document.createElement("div");
     taskDetails.className = "task-details";
