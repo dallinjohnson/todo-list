@@ -59,9 +59,15 @@ const TaskItem = (task) => {
 
     description = createDescription();
 
-    const deleteButton = document.createElement("img");
-    deleteButton.src = deleteIcon;
+    const deleteButton = document.createElement("div");
+    const deleteButtonLabel = document.createElement("span");
+    deleteButtonLabel.textContent = "Delete";
+    const trashImage = document.createElement("img");
+    trashImage.classList.add("task-delete-icon");
+    trashImage.src = deleteIcon;
     deleteButton.classList.add("task-delete-btn");
+    deleteButton.appendChild(deleteButtonLabel);
+    deleteButton.appendChild(trashImage);
     deleteButton.addEventListener("click", () => {
       if (confirm("Are you sure you want to delete this task?")) {
         pubsub.publish("deleteTask");
