@@ -32,9 +32,11 @@ const TaskList = (listHeader, displayActiveTasks = true) => {
       }
       const newTask = new Task();
       newTask.projectId = selectedProject.id;
-      TaskService.insert(newTask);
+      const savedTask = TaskService.insert(newTask);
       refreshTasks();
       render();
+      pubsub.publish("taskSelected", savedTask);
+      pubsub.publish("focusSelectedTaskTitle");
       pubsub.publish("numberOfTasksChanged");
     });
     pubsub.subscribe("projectSelected", (project) => {
@@ -42,9 +44,10 @@ const TaskList = (listHeader, displayActiveTasks = true) => {
       refreshTasks();
       render();
     });
-    pubsub.subscribe("taskUpdated", (newTask) => {
+    pubsub.subscribe("taskCheckboxClicked", () => {
       refreshTasks();
       render();
+      pubsub.publish("taskSelected", selectedTask);
     });
   };
 

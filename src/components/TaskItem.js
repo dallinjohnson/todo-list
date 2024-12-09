@@ -23,7 +23,7 @@ const TaskItem = (task) => {
   const init = () => {
     element = createElement();
     pubsub.subscribe("taskSelected", handleNewTaskSelect);
-    pubsub.subscribe("taskUpdated", handleNewTaskUpdate);
+    pubsub.subscribe("focusSelectedTaskTitle", handleFocusTitle);
     pubsub.subscribe("deleteTask", () => {
       if (selected) {
         TaskService.deleteById(task.id);
@@ -158,7 +158,8 @@ const TaskItem = (task) => {
   const handleCheckboxClick = () => {
     const newTask = { ...task, isCompleted: !task.isCompleted };
     TaskService.update(newTask);
-    pubsub.publish("taskUpdated", newTask);
+    task = newTask;
+    pubsub.publish("taskCheckboxClicked");
   };
 
   const handleEditableUpdate = (e) => {
@@ -167,7 +168,7 @@ const TaskItem = (task) => {
 
     const newTask = { ...task, [dataValue]: newContent };
     TaskService.update(newTask);
-    pubsub.publish("taskUpdated", newTask);
+    task = newTask;
   };
 
   const setSelected = (isSelected) => {
@@ -181,19 +182,14 @@ const TaskItem = (task) => {
   };
 
   const handleNewTaskSelect = (selectedTask) => {
-    if (selectedTask === task) {
+    if (!selectedTask) {
+      return;
+    }
+    if (selectedTask.id === task.id) {
       setSelected(true);
     } else {
       setSelected(false);
     }
-  };
-
-  const handleNewTaskUpdate = (newTask) => {
-    if (newTask.id !== task.id) {
-      return;
-    }
-    task = newTask;
-    render();
   };
 
   const render = () => {
@@ -203,6 +199,12 @@ const TaskItem = (task) => {
       dueDate.value = format(task.dueDate, "yyyy-MM-dd");
     }
     description.setText(task.description);
+  };
+
+  const handleFocusTitle = () => {
+    if (selected) {
+      title.getElement().focus();
+    }
   };
 
   init();
