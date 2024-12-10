@@ -11,7 +11,7 @@ const ProjectService = () => {
       projects = JSON.parse(savedProjects);
     } else {
       // Initialize with default projects and save to localStorage
-      projects = [new Project(1, "Default"), new Project(2, "Home Renovation")];
+      projects = [new Project(1, "Default")];
       saveProjects(); // Save defaults to localStorage
     }
   };

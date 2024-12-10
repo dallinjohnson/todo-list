@@ -7,21 +7,33 @@ import SortingCriteria from "../enums/SortingCriteria";
 
 const TaskView = () => {
   let element;
-  let inProgressTaskList;
-  let completedTaskList;
-  let viewHeader;
+  let sortDropdown;
 
   const init = () => {
-    const inProgressTaskListHeader = ListHeader(
-      "In Progress",
-      "+ New Task",
-      () => pubsub.publish("addNewTask")
-    );
-    inProgressTaskList = TaskList(inProgressTaskListHeader.getElement());
+    element = createElement();
+    pubsub.publish("sortTasks", sortDropdown.getValue());
+  };
 
-    const completedTaskListHeader = ListHeader("Completed");
-    completedTaskList = TaskList(completedTaskListHeader.getElement(), false);
+  const createElement = () => {
+    const viewHeader = createViewHeader();
+    const inProgressTaskList = createInProgressTaskList();
+    const completedTaskList = createCompletedTaskList();
 
+    const container = document.createElement("div");
+    container.classList.add("flex-column-10px-gap");
+    container.appendChild(viewHeader.getElement());
+    container.appendChild(inProgressTaskList.getElement());
+    container.appendChild(completedTaskList.getElement());
+    return container;
+  };
+
+  const createViewHeader = () => {
+    sortDropdown = createSortDropdown();
+    const viewHeader = ViewHeader("Tasks", sortDropdown.getElement());
+    return viewHeader;
+  };
+
+  const createSortDropdown = () => {
     const sortDropdownOptions = [
       {
         value: SortingCriteria.DATE,
@@ -39,18 +51,26 @@ const TaskView = () => {
       "task-sort-select",
       "sortTasks"
     );
-    viewHeader = ViewHeader("Tasks", sortDropdown.getElement());
-    element = createElement();
-    pubsub.publish("sortTasks", sortDropdown.getValue());
+    return sortDropdown;
   };
 
-  const createElement = () => {
-    const container = document.createElement("div");
-    container.id = "task-view";
-    container.appendChild(viewHeader.getElement());
-    container.appendChild(inProgressTaskList.getElement());
-    container.appendChild(completedTaskList.getElement());
-    return container;
+  const createInProgressTaskList = () => {
+    const inProgressTaskListHeader = ListHeader(
+      "In Progress",
+      "+ New Task",
+      () => pubsub.publish("addNewTask")
+    );
+    const inProgressTaskList = TaskList(inProgressTaskListHeader.getElement());
+    return inProgressTaskList;
+  };
+
+  const createCompletedTaskList = () => {
+    const completedTaskListHeader = ListHeader("Completed");
+    const completedTaskList = TaskList(
+      completedTaskListHeader.getElement(),
+      false
+    );
+    return completedTaskList;
   };
 
   init();

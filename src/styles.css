@@ -281,12 +281,6 @@ input[type="date"] {
   background-color: #ebedff;
 }
 
-#task-view {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
 .task-delete-icon {
   width: 1.3rem;
   height: 1.3rem;
@@ -310,4 +304,10 @@ input[type="date"] {
 .flex-group-5px-gap {
   display: flex;
   gap: 5px;
+}
+
+.flex-column-10px-gap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }

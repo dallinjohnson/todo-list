@@ -1,4 +1,5 @@
 import { ProjectList } from "./ProjectList";
+import ProjectView from "./ProjectView";
 import TaskView from "./TaskView";
 
 const App = (rootElement) => {
@@ -13,7 +14,7 @@ const App = (rootElement) => {
   const init = () => {
     const container = document.createElement("div");
     container.classList.add("split-view");
-    container.appendChild(ProjectList().getElement());
+    container.appendChild(ProjectView().getElement());
     container.appendChild(TaskView().getElement());
 
     setContent(container);
