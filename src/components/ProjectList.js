@@ -7,13 +7,22 @@ import ProjectListType from "../enums/ProjectListType";
 const ProjectList = (listHeader, listType) => {
   let element;
   let projects;
+  let selected;
 
   const init = () => {
     refreshProjects();
     element = createElement();
-    pubsub.subscribe("newProjectAdded", () => {
+    // pubsub.subscribe("projectSelected", (project) => {
+    //   selected = project;
+    // });
+    pubsub.subscribe("newProjectAdded", (newProject) => {
       refreshProjects();
-      console.log(`LIST TYPE: ${listType}; PROJECTS: ${projects}`);
+      render();
+      pubsub.publish("projectSelected", newProject);
+      pubsub.publish("focusProjectTitle", newProject);
+    });
+    pubsub.subscribe("deleteProject", () => {
+      refreshProjects();
       render();
     });
   };

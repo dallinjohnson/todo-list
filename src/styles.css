@@ -247,6 +247,19 @@ input[type="date"] {
   background-color: white;
   border-radius: 0.5rem;
   box-shadow: 0px 4px 8px rgba(4, 0, 110, 0.2);
+  user-select: none;
+}
+
+.task {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  user-select: none;
+  box-shadow: 0px 4px 8px rgba(4, 0, 110, 0.2);
 }
 
 .project-list {
@@ -310,4 +323,12 @@ input[type="date"] {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.project-details {
+  pointer-events: none;
+}
+
+.selected > .project-details {
+  pointer-events: all;
 }

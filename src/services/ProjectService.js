@@ -40,7 +40,7 @@ const ProjectService = () => {
     );
     if (indexToDelete !== -1) {
       projects = projects.filter((_, i) => i !== indexToDelete);
-      const projectTasks = TaskService.findAllByProjectId(projectId);
+      const projectTasks = TaskService.findAllByProject(projectId);
       projectTasks.forEach((task) => {
         TaskService.deleteById(task.id);
       });

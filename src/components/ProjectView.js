@@ -14,6 +14,8 @@ const ProjectView = () => {
 
   const init = () => {
     element = createElement();
+    pubsub.subscribe("numberOfTasksChanged", render);
+    pubsub.subscribe("taskCheckboxClicked", render);
   };
 
   const createElement = () => {
@@ -81,9 +83,14 @@ const ProjectView = () => {
   };
 
   const createNewProject = () => {
-    const project = new Project(null, "New Project");
+    const project = new Project(null, null);
     const savedProject = ProjectService.insert(project);
     pubsub.publish("newProjectAdded", savedProject);
+  };
+
+  const render = () => {
+    element.innerHTML = "";
+    element.append(...createElement().childNodes);
   };
 
   init();
