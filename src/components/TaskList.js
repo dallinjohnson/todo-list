@@ -22,6 +22,7 @@ const TaskList = (listHeader, displayActiveTasks = true) => {
       sortingCriteria = criteria;
       refreshTasks();
       render();
+      pubsub.publish("taskSelected", selectedTask);
     });
     pubsub.subscribe("taskSelected", (newTask) => {
       selectedTask = newTask;
@@ -40,6 +41,9 @@ const TaskList = (listHeader, displayActiveTasks = true) => {
       pubsub.publish("numberOfTasksChanged");
     });
     pubsub.subscribe("projectSelected", (project) => {
+      if (project.id === selectedProject.id) {
+        return;
+      }
       selectedProject = project;
       refreshTasks();
       render();

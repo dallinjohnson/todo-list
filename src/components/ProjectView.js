@@ -11,11 +11,19 @@ import ProjectListType from "../enums/ProjectListType";
 const ProjectView = () => {
   let element;
   let sortDropdown;
+  let selectedProject;
 
   const init = () => {
     element = createElement();
     pubsub.subscribe("numberOfTasksChanged", render);
     pubsub.subscribe("taskCheckboxClicked", render);
+    pubsub.subscribe("projectSelected", (project) => {
+      selectedProject = project;
+    });
+    if (!selectedProject) {
+      selectedProject = ProjectService.findById(1);
+    }
+    pubsub.publish("projectSelected", selectedProject);
   };
 
   const createElement = () => {
@@ -91,6 +99,10 @@ const ProjectView = () => {
   const render = () => {
     element.innerHTML = "";
     element.append(...createElement().childNodes);
+    if (!selectedProject) {
+      selectedProject = ProjectService.findById(1);
+    }
+    pubsub.publish("projectSelected", selectedProject);
   };
 
   init();

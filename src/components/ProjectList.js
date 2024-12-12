@@ -7,14 +7,10 @@ import ProjectListType from "../enums/ProjectListType";
 const ProjectList = (listHeader, listType) => {
   let element;
   let projects;
-  let selected;
 
   const init = () => {
     refreshProjects();
     element = createElement();
-    // pubsub.subscribe("projectSelected", (project) => {
-    //   selected = project;
-    // });
     pubsub.subscribe("newProjectAdded", (newProject) => {
       refreshProjects();
       render();
