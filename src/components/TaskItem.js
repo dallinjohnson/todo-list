@@ -24,12 +24,6 @@ const TaskItem = (task) => {
     element = createElement();
     pubsub.subscribe("taskSelected", handleNewTaskSelect);
     pubsub.subscribe("focusSelectedTaskTitle", handleFocusTitle);
-    pubsub.subscribe("deleteTask", () => {
-      if (selected) {
-        TaskService.deleteById(task.id);
-        element.remove();
-      }
-    });
     render();
   };
 
@@ -70,6 +64,7 @@ const TaskItem = (task) => {
     deleteButton.appendChild(trashImage);
     deleteButton.addEventListener("click", () => {
       if (confirm("Are you sure you want to delete this task?")) {
+        TaskService.deleteById(task.id);
         pubsub.publish("deleteTask");
         pubsub.publish("numberOfTasksChanged");
       }

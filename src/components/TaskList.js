@@ -48,6 +48,10 @@ const TaskList = (listHeader, displayActiveTasks = true) => {
       refreshTasks();
       render();
     });
+    pubsub.subscribe("deleteTask", () => {
+      refreshTasks();
+      render();
+    });
     pubsub.subscribe("taskCheckboxClicked", () => {
       refreshTasks();
       render();
@@ -60,10 +64,17 @@ const TaskList = (listHeader, displayActiveTasks = true) => {
     container.classList.add("task-list");
     container.appendChild(listHeader);
 
-    const taskItems = tasks.map((t) => TaskItem(t));
-    taskItems.forEach((taskItem) =>
-      container.appendChild(taskItem.getElement())
-    );
+    if (tasks.length > 0) {
+      const taskItems = tasks.map((t) => TaskItem(t));
+      taskItems.forEach((taskItem) =>
+        container.appendChild(taskItem.getElement())
+      );
+    } else {
+      const message = document.createElement("span");
+      message.textContent = "No tasks to display";
+      container.appendChild(message);
+    }
+
     return container;
   };
 
