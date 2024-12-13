@@ -1,8 +1,6 @@
 import pubsub from "../pubsub/PubSub";
 import { ProjectList } from "./ProjectList";
-import SortDropdown from "./SortDropdown";
 import ViewHeader from "./ViewHeader";
-import SortingCriteria from "../enums/SortingCriteria";
 import ListHeader from "./ListHeader";
 import { Project } from "../classes/Project";
 import ProjectService from "../services/ProjectService";
@@ -10,7 +8,6 @@ import ProjectListType from "../enums/ProjectListType";
 
 const ProjectView = () => {
   let element;
-  let sortDropdown;
   let selectedProject;
 
   const init = () => {
@@ -43,24 +40,7 @@ const ProjectView = () => {
   };
 
   const createViewHeader = () => {
-    sortDropdown = createSortDropdown();
-    return ViewHeader("Projects", sortDropdown.getElement());
-  };
-
-  const createSortDropdown = () => {
-    const options = [
-      {
-        value: SortingCriteria.TITLE,
-        textContent: "Title",
-        selected: true,
-      },
-    ];
-    const sortDropdown = SortDropdown(
-      options,
-      "project-sort-select",
-      "sort-projects"
-    );
-    return sortDropdown;
+    return ViewHeader("Projects");
   };
 
   const createDefaultProjectList = () => {

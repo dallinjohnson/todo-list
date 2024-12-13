@@ -1,4 +1,3 @@
-import { ProjectList } from "./ProjectList";
 import ProjectView from "./ProjectView";
 import TaskView from "./TaskView";
 

@@ -1,9 +1,9 @@
 import { isBefore } from "date-fns";
 
 const sortByTitle = (titleA, titleB) => {
-  if (titleA === undefined) {
+  if (!titleA) {
     return 1;
-  } else if (titleB === undefined) {
+  } else if (!titleB) {
     return -1;
   }
   return titleA.toLowerCase().localeCompare(titleB.toLowerCase());

@@ -13,7 +13,10 @@ const ViewHeader = (headerText, sortDropdown) => {
     header.textContent = headerText;
 
     container.append(header);
-    container.append(sortDropdown);
+    if (sortDropdown) {
+      container.append(sortDropdown);
+    }
+
     return container;
   };
 

@@ -3,6 +3,7 @@ import ProjectService from "../services/ProjectService";
 import TaskService from "../services/TaskService";
 import ProjectItem from "./ProjectItem";
 import ProjectListType from "../enums/ProjectListType";
+import { sortByTitle } from "../util/SortUtil";
 
 const ProjectList = (listHeader, listType) => {
   let element;
@@ -40,6 +41,7 @@ const ProjectList = (listHeader, listType) => {
   const refreshProjects = () => {
     const allProjects = ProjectService.findAll();
     const filteredProjects = filterProjects(allProjects);
+    const sortedProjects = sortProjects(filteredProjects);
     projects = filteredProjects;
   };
 
@@ -59,6 +61,10 @@ const ProjectList = (listHeader, listType) => {
         (project) => projectIsCompleted(project) && project.id !== 1
       );
     }
+  };
+
+  const sortProjects = (projects) => {
+    return projects.sort((a, b) => sortByTitle(a.title, b.title));
   };
 
   const render = () => {

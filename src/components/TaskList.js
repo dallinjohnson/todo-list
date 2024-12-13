@@ -24,9 +24,11 @@ const TaskList = (listHeader, displayActiveTasks = true) => {
       render();
       pubsub.publish("taskSelected", selectedTask);
     });
+
     pubsub.subscribe("taskSelected", (newTask) => {
       selectedTask = newTask;
     });
+
     pubsub.subscribe("addNewTask", () => {
       if (!displayActiveTasks) {
         return;
@@ -40,6 +42,7 @@ const TaskList = (listHeader, displayActiveTasks = true) => {
       pubsub.publish("focusSelectedTaskTitle");
       pubsub.publish("numberOfTasksChanged");
     });
+
     pubsub.subscribe("projectSelected", (project) => {
       if (project.id === selectedProject.id) {
         return;
@@ -48,14 +51,22 @@ const TaskList = (listHeader, displayActiveTasks = true) => {
       refreshTasks();
       render();
     });
+
     pubsub.subscribe("deleteTask", () => {
       refreshTasks();
       render();
     });
+
     pubsub.subscribe("taskCheckboxClicked", () => {
       refreshTasks();
       render();
       pubsub.publish("taskSelected", selectedTask);
+    });
+
+    pubsub.subscribe("deleteProject", () => {
+      setTimeout(() => {
+        pubsub.publish("projectSelected", ProjectService.findById(1));
+      }, 10);
     });
   };
 
