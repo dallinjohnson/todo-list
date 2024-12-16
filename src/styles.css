@@ -52,6 +52,7 @@ h4,
 h5,
 h6 {
   overflow-wrap: break-word;
+  user-select: none;
 }
 /*
   8. Create a root stacking context
@@ -71,6 +72,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  user-select: none;
 }
 
 .task {
@@ -266,12 +268,15 @@ input[type="date"] {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  user-select: none;
 }
 
 .split-view {
   display: grid;
-  grid-template-columns: 300px minmax(500px, 1fr);
-  gap: 1rem;
+  grid-template-columns: 300px 500px;
+  column-gap: 2rem;
+  row-gap: 2rem;
+  justify-content: center;
 }
 
 .list-header {
@@ -331,4 +336,21 @@ input[type="date"] {
 
 .selected > .project-details {
   pointer-events: all;
+}
+
+.faded-text {
+  opacity: 50%;
+}
+
+#header {
+  grid-column: span 2;
+}
+
+@media (max-width: 900px) {
+  .split-view {
+    grid-template-columns: 1fr;
+  }
+  #header {
+    grid-column: span 1;
+  }
 }

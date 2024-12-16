@@ -31,10 +31,18 @@ const ProjectList = (listHeader, listType) => {
       container.appendChild(listHeader);
     }
 
-    projects.map((project) => {
-      const projectItem = ProjectItem(project);
-      container.appendChild(projectItem.getElement());
-    });
+    if (projects.length > 0) {
+      projects.map((project) => {
+        const projectItem = ProjectItem(project);
+        container.appendChild(projectItem.getElement());
+      });
+    } else {
+      const message = document.createElement("span");
+      message.textContent = "No projects to display";
+      message.classList.add("faded-text");
+      container.appendChild(message);
+    }
+
     return container;
   };
 
@@ -42,7 +50,7 @@ const ProjectList = (listHeader, listType) => {
     const allProjects = ProjectService.findAll();
     const filteredProjects = filterProjects(allProjects);
     const sortedProjects = sortProjects(filteredProjects);
-    projects = filteredProjects;
+    projects = sortedProjects;
   };
 
   const filterProjects = (projects) => {

@@ -83,6 +83,7 @@ const TaskList = (listHeader, displayActiveTasks = true) => {
     } else {
       const message = document.createElement("span");
       message.textContent = "No tasks to display";
+      message.classList.add("faded-text");
       container.appendChild(message);
     }
 
